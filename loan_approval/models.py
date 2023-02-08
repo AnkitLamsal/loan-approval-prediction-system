@@ -59,8 +59,6 @@ class LoanDetails(models.Model):
     
 
 class LoanPrediction(models.Model):
-    prediction_status = models.BooleanField(default=0)
+    prediction_status = models.BooleanField(default=False)
     loan_status = models.BooleanField(null=True,default=None)
     loan = models.OneToOneField(Loan, on_delete = models.CASCADE)
-    
-    
