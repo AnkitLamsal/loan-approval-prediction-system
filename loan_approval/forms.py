@@ -50,4 +50,4 @@ class LoanRequestModelForm(forms.ModelForm):
     class Meta:
         model = Loan
         # fields = "__all__"
-        exclude = ['applicant',]
+        exclude = ['applicant_details',]

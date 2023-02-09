@@ -7,14 +7,14 @@ class Applicant(models.Model):
     applicant = models.OneToOneField(User, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.applicant.username
+        return f'{self.applicant.username}'
     
 
 class Employee(models.Model):
     employee = models.OneToOneField(User, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.employee.username
+        return f'{self.employee.username}'
     
 class Loan(models.Model):
     OWNERSHIP_CHOICES = [('RENT','RENT'),
@@ -39,7 +39,8 @@ class Loan(models.Model):
     income = models.FloatField(validators=[MinValueValidator(1000.0),
                                        MaxValueValidator(7000000.0)])
     loan_intent = models.CharField(max_length=20,choices=INTENTIONS)
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    applicant_details = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    managed_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
     
 class LoanDetails(models.Model):
     LOAN_GRADES = [
@@ -60,11 +61,10 @@ class LoanDetails(models.Model):
     grade = models.CharField(max_length=3, choices=LOAN_GRADES)
     loan_percent_to_income = models.FloatField(validators=[MinValueValidator(0.0),
                                        MaxValueValidator(0.84)])
-    loan = models.OneToOneField(Loan, on_delete= models.CASCADE)
-    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    loan_request = models.OneToOneField(Loan, on_delete= models.CASCADE)
     
 
 class LoanPrediction(models.Model):
     prediction_status = models.BooleanField(default=False)
     loan_status = models.BooleanField(null=True,default=None)
-    loan = models.OneToOneField(Loan, on_delete =  models.CASCADE)
+    loan_data = models.OneToOneField(Loan, on_delete =  models.CASCADE)
