@@ -15,7 +15,6 @@ class Loan(models.Model):
                          ('MORTGAGE','MORTGAGE'),
                          ('OTHER','OTHER')
                          ]
-        
     INTENTIONS = [('PERSONAL','PERSONAL'),
                   ('EDUCATION','EDUCATION'),
                   ('MEDICAL','MEDICAL'),
@@ -33,7 +32,7 @@ class Loan(models.Model):
     income = models.FloatField(validators=[MinValueValidator(1000.0),
                                        MaxValueValidator(7000000.0)])
     loan_intent = models.CharField(max_length=20,choices=INTENTIONS)
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(Applicant, on_delete=models.SET_NULL, null=True)
     
 class LoanDetails(models.Model):
     LOAN_GRADES = [
@@ -54,11 +53,11 @@ class LoanDetails(models.Model):
     grade = models.CharField(max_length=3, choices=LOAN_GRADES)
     loan_percent_to_income = models.FloatField(validators=[MinValueValidator(0.0),
                                        MaxValueValidator(0.84)])
-    loan = models.OneToOneField(Loan(), on_delete= models.CASCADE)
+    loan = models.OneToOneField(Loan, on_delete= models.CASCADE)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     
 
 class LoanPrediction(models.Model):
     prediction_status = models.BooleanField(default=False)
     loan_status = models.BooleanField(null=True,default=None)
-    loan = models.OneToOneField(Loan, on_delete = models.CASCADE)
+    loan = models.OneToOneField(Loan, on_delete =  models.CASCADE)
