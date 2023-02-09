@@ -17,9 +17,14 @@ class ApplicantModelForm(UserCreationForm):
     
     def save(self, commit=True):
         user = super(ApplicantForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
+        # user.email = self.cleaned_data['email']
         if commit:
-            user.save()
+            user = User.objects.create_user(  
+            self.cleaned_data['username'],  
+            self.cleaned_data['email'],  
+            self.cleaned_data['password1']  
+            )
+            user.save() 
         return user
     
     

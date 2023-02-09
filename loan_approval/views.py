@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import CreateView
-from .models import Loan
-from .forms import LoanModelForm
+from .models import Loan, Applicant
+from .forms import LoanModelForm,ApplicantModelForm
 from django.urls import reverse,reverse_lazy
 
 # Create your views here.
@@ -20,7 +20,8 @@ def applicant_register(request):
     if request.POST == 'POST':  
         form = ApplicantModelForm()  
         if form.is_valid():  
-            form.save()  
+            user = form.save()
+            Applicant.objects.create(applicant=user)
     else:  
         form = ApplicantModelForm()  
     context = {  
