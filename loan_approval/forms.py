@@ -18,8 +18,7 @@ class ApplicantModelForm(UserCreationForm):
     def save(self, commit=True):
         user = super(ApplicantModelForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
-        print(user.email)
-        # user.is_staff = True
+        # print(user.email)
         if commit:
             user.save()
         return user
@@ -30,7 +29,21 @@ class EmployeeModelForm(UserCreationForm):
     class meta:
         model = User
         fields = ['email','username','password1','password2']
-
+        
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already used")
+        return email    
+    
+    def save(self, commit=True):
+        user = super(EmployeeModelForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        # print(user.email)
+        user.is_staff = True
+        if commit:
+            user.save()
+        return user
     
     
 class LoanModelForm(forms.ModelForm):
