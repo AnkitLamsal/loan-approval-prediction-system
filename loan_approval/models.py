@@ -5,9 +5,16 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Applicant(models.Model):
     applicant = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.applicant.username
+    
 
 class Employee(models.Model):
     employee = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.employee.username
     
 class Loan(models.Model):
     OWNERSHIP_CHOICES = [('RENT','RENT'),

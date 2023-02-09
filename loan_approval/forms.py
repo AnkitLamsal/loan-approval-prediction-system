@@ -8,31 +8,6 @@ class ApplicantModelForm(UserCreationForm):
     class meta:
         model = User
         fields = ['email','username','password1','password2']
-        
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("This email is already used")
-        return email
-    
-    def save(self, commit=True):
-        user = super(ApplicantForm, self).save(commit=False)
-        # user.email = self.cleaned_data['email']
-        if commit:
-            user = User.objects.create_user(  
-            self.cleaned_data['username'],  
-            self.cleaned_data['email'],  
-            self.cleaned_data['password1']  
-            )
-            user.save() 
-        return user
-    
-    
-class EmployeeModelForm(UserCreationForm):
-    email = forms.EmailField()
-    class meta:
-        model = User
-        fields = ['email','username','password1','password2']
     
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -41,13 +16,21 @@ class EmployeeModelForm(UserCreationForm):
         return email    
     
     def save(self, commit=True):
-        user = super(EmployeeForm, self).save(commit=False)
+        user = super(ApplicantModelForm, self).save(commit=False)
         user.email = self.cleaned_data['email']
-        user.is_staff = True
-        user.admin_status = True
+        print(user.email)
+        # user.is_staff = True
         if commit:
             user.save()
         return user
+    
+    
+class EmployeeModelForm(UserCreationForm):
+    email = forms.EmailField()
+    class meta:
+        model = User
+        fields = ['email','username','password1','password2']
+
     
     
 class LoanModelForm(forms.ModelForm):

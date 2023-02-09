@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import CreateView
 from .models import Loan, Applicant
@@ -16,17 +16,18 @@ class ApplicantCreateView(CreateView):
     template_name = 'loan_approval/applicant_create.html'
     
     # User Registration
-def applicant_register(request):  
-    if request.POST == 'POST':  
-        form = ApplicantModelForm()  
-        if form.is_valid():  
-            user = form.save()
-            Applicant.objects.create(applicant=user)
-    else:  
-        form = ApplicantModelForm()  
-    context = {  
-        'form':form  
-    }  
-    return render(request, 'loan_approval/applicant_registration.html', context)  
+def applicant_register(request): 
+    if request.method == "POST":
+        user_form = ApplicantModelForm(request.POST)
+        if user_form.is_valid():
+            print(user_form.cleaned_data)
+            applicant = user_form.save()
+            Applicant.objects.create(applicant= applicant)
+            print("applicant created sucessfully.")
+            return redirect('credit_risk:index')
+    elif request.method =="GET":
+        user_form = ApplicantModelForm()
+    context = {'form':user_form}
+    return render(request, 'loan_approval/applicant_registration.html',context)  
     
 
