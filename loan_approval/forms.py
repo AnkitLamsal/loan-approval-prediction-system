@@ -46,7 +46,8 @@ class EmployeeModelForm(UserCreationForm):
         return user
     
     
-class LoanModelForm(forms.ModelForm):
+class LoanRequestModelForm(forms.ModelForm):
     class Meta:
         model = Loan
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ['applicant',]

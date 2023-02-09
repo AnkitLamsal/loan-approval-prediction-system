@@ -39,7 +39,7 @@ class Loan(models.Model):
     income = models.FloatField(validators=[MinValueValidator(1000.0),
                                        MaxValueValidator(7000000.0)])
     loan_intent = models.CharField(max_length=20,choices=INTENTIONS)
-    applicant = models.ForeignKey(Applicant, on_delete=models.SET_NULL, null=True)
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
     
 class LoanDetails(models.Model):
     LOAN_GRADES = [
@@ -61,7 +61,7 @@ class LoanDetails(models.Model):
     loan_percent_to_income = models.FloatField(validators=[MinValueValidator(0.0),
                                        MaxValueValidator(0.84)])
     loan = models.OneToOneField(Loan, on_delete= models.CASCADE)
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
     
 
 class LoanPrediction(models.Model):
