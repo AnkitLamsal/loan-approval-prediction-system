@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import hello_world, ApplicantCreateView
+from .views import hello_world, applicant_register
+from .views import ApplicantCreateView
 
 app_name = "credit_risk"
 urlpatterns = [
     path('',hello_world,name="index"),
-    path('applicant/',ApplicantCreateView.as_view(),name="applicant_create"),
+    # path('applicant/',ApplicantCreateView.as_view(),name="applicant_create"),
+    path('applicant/register/',applicant_register,name='applicant_register'),
 ]
