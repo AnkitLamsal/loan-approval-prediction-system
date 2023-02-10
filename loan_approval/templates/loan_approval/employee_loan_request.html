@@ -1,6 +1,4 @@
 <ul>
-    
-    {% if request.user.is_staff %}
     <!-- Iterate over object_list -->
     <li>Object name &nbsp; Home Ownership &nbsp; Employee Length &nbsp; Loan Amount &nbsp; Applicant &nbsp; Manager &nbsp;</li>
     {% for object in object_list %}
@@ -18,7 +16,4 @@
     {% empty %}
     <li>No objects yet.</li>
     {% endfor %}
-    {% else %}
-    Error 403 : Permission Denied.
-    {% endif %}
 </ul>

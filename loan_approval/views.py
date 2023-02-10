@@ -88,3 +88,26 @@ class LoanRequestCreateView(CreateView):
 class LoanRequestListView(ListView):
     model = Loan
     template_name = 'loan_approval/employee_loan_request.html'
+    
+    def get_queryset(self):
+        queryset = self.model._default_manager.all()
+        try:
+            user = self.request.user.applicant
+        except:
+            return queryset
+        else:
+            return queryset.filter(applicant_details = user)
+    
+@method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
+class LoanListView(ListView):
+    model = Loan
+    template_name = 'loan_approval/employee_loan_request.html'
+    
+    def get_queryset(self):
+        queryset = self.model._default_manager.all()
+        try:
+            user = self.request.user.employee
+        except:
+            return queryset
+        else:
+            return queryset.filter(managed_by = user)

@@ -52,7 +52,7 @@ class LoanRequestModelForm(forms.ModelForm):
         # fields = "__all__"
         exclude = ['applicant_details',]
         
-class LoanDetailsModelForm(models.ModelForm):
+class LoanDetailsModelForm(forms.ModelForm):
     class Meta:
         model = LoanDetails
         fields = '__all__'
