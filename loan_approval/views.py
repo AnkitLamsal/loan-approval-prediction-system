@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Loan, Applicant, Employee
-from .forms import LoanRequestModelForm,ApplicantModelForm, EmployeeModelForm
+from .models import Loan, Applicant, Employee, LoanDetails, LoanPrediction
+from .forms import LoanRequestModelForm,ApplicantModelForm, EmployeeModelForm, LoanDetailsModelForm
 from django.urls import reverse,reverse_lazy
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -111,3 +111,35 @@ class LoanListView(ListView):
             return queryset
         else:
             return queryset.filter(managed_by = user)
+
+
+@login_required
+def loanDetailsCreateView(request,pk):
+    context = {}
+    queryset = Loan.objects.get(id=pk)
+    if request.method == "GET":
+        context['home_ownership'] = queryset.home_ownership
+        context['emp_length'] = queryset.emp_length
+        context['loan_amount'] = queryset.loan_amount
+        context['person_age'] = queryset.person_age
+        context['income'] = queryset.income
+        context['loan_intent'] = queryset.loan_intent
+        context['id'] = pk
+        # print(queryset.managed_by, queryset.applicant_details)
+        form = LoanDetailsModelForm()
+        context['form'] = form
+        return render(request, 'loan_approval/loan_details_form.html',context)
+    elif request.method == "POST":
+        print("POST")
+        id = pk
+        # print(id)
+        form = LoanDetailsModelForm(request.POST)
+        context['form'] = form
+        if form.is_valid():
+            loan_details = form.save(commit=False)
+            # print(form.cleaned_data)
+            loan_details.loan_request = queryset
+            loan_details.save()
+            prediction = LoanPrediction.objects.create(loan_data=queryset)
+            prediction.save()
+        return redirect('loan_approval:index')

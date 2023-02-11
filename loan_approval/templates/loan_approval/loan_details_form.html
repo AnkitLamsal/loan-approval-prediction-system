@@ -1,0 +1,12 @@
+{{home_ownership}}<br>
+{{emp_length}}<br>
+{{loan_amount}}<br>
+{{person_age}}<br>
+{{income}}<br>
+{{loan_intent}}<br>
+
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" value='submit'>
+</form>
