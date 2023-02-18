@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import hello_world, applicant_register, employee_register, logout, loanDetailsCreateView
-from .views import LoanRequestCreateView, UserLoginView, LoanRequestListView, LoanListView
+from .views import LoanRequestCreateView, UserLoginView, LoanRequestListView, LoanListView, LoanDetailsListView
 from django.contrib.auth.views import LogoutView
 
 app_name = "loan_approval"
@@ -15,6 +15,8 @@ urlpatterns = [
     path('loan/request/',LoanRequestCreateView.as_view(),name="loan_request"),
     path('loan/list/',LoanRequestListView.as_view(), name='employee_loan_list'),
     path('loan/',LoanListView.as_view(), name='applicant_loan_list'),
-    # 
+    
+    # Employee related scenarios
     path("loan-details/create/<int:pk>/",loanDetailsCreateView, name='loan_details_create'),
+    path("loan-details/",LoanDetailsListView.as_view(),name="detailed_loans"),
 ]

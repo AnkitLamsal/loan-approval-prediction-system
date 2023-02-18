@@ -143,3 +143,27 @@ def loanDetailsCreateView(request,pk):
             prediction = LoanPrediction.objects.create(loan_data=queryset)
             prediction.save()
         return redirect('loan_approval:index')
+    
+@method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
+class LoanDetailsListView(ListView):
+    model = LoanDetails
+    template_name = 'loan_approval/detailed_loan_details.html'
+    
+    def get_queryset(self):
+        queryset = self.model._default_manager
+        try:
+            user = self.request.user.employee
+        except:
+            print("User is applicant.")
+        else:
+            # loan = LoanDetails.objects.filter(loan_request__managed_by = employee)
+            return queryset.filter(loan_request__managed_by = user)
+        try:
+            user = self.request.user.applicant
+            # print("Applicant view")
+        except:
+            print("User is employee.")
+        else:
+            # loan = LoanDetails.objects.filter(loan_request__managed_by = employee)
+            return queryset.filter(loan_request__applicant_details = user)
+        
