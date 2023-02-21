@@ -8,7 +8,7 @@
         &nbsp; {{object.applicant_details}} &nbsp; {{object.managed_by}}<br>
         {% comment %} <a href="{% url 'loan_approval:loan_update id={{object.id}}' %}">Update</a></li> {% endcomment %}
         <a href="{% url 'loan_approval:loan_update' object.id %}">Update</a>
-        <a href="#">Delete</a>
+        <a href="{% url 'loan_approval:loan_delete' object.id %}">Delete</a>
     {% comment %} <li>{{ object.description }}</li> {% endcomment %}
    
     {% comment %} <hr/> {% endcomment %}

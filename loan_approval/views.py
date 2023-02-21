@@ -194,3 +194,12 @@ def update_loan_request(request,id):
             return render(request, 'loan_approval/loan_update.html',{"form":form})
         return redirect("loan_approval:applicant_loan_list")
     
+def delete_loan(request,id):
+    # fetch the object related to passed id
+    obj = get_object_or_404(Loan, id = id)
+    # delete object
+    obj.delete()
+    # after deleting redirect to
+        # home page
+    return redirect("loan_approval:applicant_loan_list")
+    
