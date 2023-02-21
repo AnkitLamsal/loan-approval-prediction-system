@@ -14,8 +14,14 @@ from django.contrib.auth.views import LoginView
 from django.utils.decorators import method_decorator
 
 # Create your views here.
-def hello_world(request):
-    return HttpResponse("Hello World "+str(request.user));
+# def hello_world(request):
+#     return HttpResponse("Hello World "+str(request.user));
+
+def index(request):
+    return render(request, 'loan_approval/index.html',{})
+
+def dashboard(request):
+    return render(request, 'loan_approval/dashboard.html',{})
     
 # User Registration
 def applicant_register(request): 
@@ -26,7 +32,7 @@ def applicant_register(request):
             applicant = user_form.save()
             Applicant.objects.create(applicant= applicant)
             print("applicant created sucessfully.")
-            return redirect('loan_approval:index')
+            return redirect('loan_approval:user_login')
     elif request.method =="GET":
         user_form = ApplicantModelForm()
     context = {'form':user_form}
@@ -40,7 +46,7 @@ def employee_register(request):
             employee = user_form.save()
             Employee.objects.create(employee=employee)
             print("applicant created sucessfully.")
-            return redirect('loan_approval:index')
+            return redirect('loan_approval:user_login')
     elif request.method =="GET":
         user_form = EmployeeModelForm()
     context = {'form':user_form}
@@ -52,7 +58,7 @@ class UserLoginView(LoginView):
     redirect_authenticated_user = True
     template_name = 'loan_approval/applicant_registration.html'
     def get_success_url(self):
-        return reverse_lazy('loan_approval:index') 
+        return reverse_lazy('loan_approval:dashboard') 
     
     def form_invalid(self, form):
         messages.error(self.request,'Invalid username or password')
@@ -69,7 +75,7 @@ def logout_view(request):
 class LoanRequestCreateView(CreateView):
     model = Loan
     form_class = LoanRequestModelForm
-    success_url = reverse_lazy('loan_approval:index')
+    success_url = reverse_lazy('loan_approval:dashboard')
     template_name = 'loan_approval/applicant_create.html'
     
     def post(self, request, *args, **kwargs):
@@ -172,7 +178,8 @@ class LoanDetailsListView(ListView):
 class LoanDetailsDetailView(DetailView):
     model = LoanDetails
     template_name = 'loan_approval/detailed_loan_details_.html'
-    
+
+@login_required
 def update_loan_request(request,id):
     if request.method =="GET":
         obj = get_object_or_404(Loan, id=id)
@@ -193,7 +200,8 @@ def update_loan_request(request,id):
         else:
             return render(request, 'loan_approval/loan_update.html',{"form":form})
         return redirect("loan_approval:applicant_loan_list")
-    
+
+@login_required
 def delete_loan(request,id):
     # fetch the object related to passed id
     obj = get_object_or_404(Loan, id = id)

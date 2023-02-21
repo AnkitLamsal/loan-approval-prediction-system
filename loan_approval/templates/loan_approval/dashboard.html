@@ -1,0 +1,18 @@
+{% if user.is_authenticated %}
+<h1>Dashboard Page</h1>
+    {% if user.applicant %}
+    <h2>Applicant</h2>
+    Urls:
+    <a href="{% url 'loan_approval:loan_request' %}">Apply for Loan</a> <br><br><br>
+    <a href="{% url 'loan_approval:applicant_loan_list' %}">View Requested Loans</a> <br><br><br>
+    <a href="{% url 'loan_approval:loans_details_list' %}">View Loan Approval Prediction</a> <br><br><br>
+    {% elif user.employee %}
+    <h2>Employee</h2>
+    <a href="{% url 'loan_approval:employee_loan_list' %}">Loans applied by Applicants</a> <br><br><br>
+    <a href="{% url 'loan_approval:loans_details_list' %}">Predicted Loans</a> <br><br><br>
+    {% comment %} <a href="#">View Loan Approval Prediction</a> <br><br><br> {% endcomment %}
+    {% endif %}
+    {% comment %} <br> {% endcomment %}
+    <a href="{% url 'loan_approval:user_logout' %}">User Logout</a> <br>    
+{% endif %}
+    

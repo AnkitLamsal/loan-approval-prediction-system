@@ -6,7 +6,13 @@
     <li>
         {{ object }} &nbsp; {{object.home_ownership}} &nbsp; {{object.emp_length}} &nbsp; {{object.loan_amount}}
         &nbsp; {{object.applicant_details}} &nbsp; {{object.managed_by}}<br>
-        <a href="#">Provide Loan Data</a>
+        <a href="{% url 'loan_approval:loan_details_create' pk=object.id%}">Provide Loan Data</a>
+        
+        {% if object.loandetails %}
+        <a href="#">Update</a>
+            
+        {% endif %}
+            
     </li>
     
     {% comment %} <li>{{ object.description }}</li> {% endcomment %}
