@@ -210,4 +210,27 @@ def delete_loan(request,id):
     # after deleting redirect to
         # home page
     return redirect("loan_approval:applicant_loan_list")
-    
+
+def update_loan_details(request,pk):
+    context = {}
+    obj = get_object_or_404(LoanDetails, id = pk)
+    context['home_ownership'] = obj.loan_request.home_ownership
+    context['emp_length'] = obj.loan_request.emp_length
+    context['loan_amount'] = obj.loan_request.loan_amount
+    context['person_age'] = obj.loan_request.person_age
+    context['income'] = obj.loan_request.income
+    context['loan_intent'] = obj.loan_request.loan_intent
+    if request.method == "GET":        
+        form = LoanDetailsModelForm(request.GET or None, instance = obj)
+        # form = LoanDetailsModelForm()
+        context['form'] = form
+        return render(request, 'loan_approval/loan_details_form.html',context)
+    elif request.method == "POST":
+        form = LoanDetailsModelForm(request.POST or None, instance = obj)
+        context['form'] = form
+        if form.is_valid():
+            print(form)
+            form.save()
+        else:
+            return render(request, 'loan_approval/loan_details_form.html',context)
+        return redirect("loan_approval:applicant_loan_list")

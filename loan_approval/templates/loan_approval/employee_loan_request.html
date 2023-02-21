@@ -9,7 +9,7 @@
         <a href="{% url 'loan_approval:loan_details_create' pk=object.id%}">Provide Loan Data</a>
         
         {% if object.loandetails %}
-        <a href="#">Update</a>
+        <a href="{% url 'loan_approval:loan_details_update' pk=object.loandetails.id %}">Update</a>
             
         {% endif %}
             
