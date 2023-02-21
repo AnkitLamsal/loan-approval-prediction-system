@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Loan, Applicant, Employee, LoanDetails, LoanPrediction
 from .forms import LoanRequestModelForm,ApplicantModelForm, EmployeeModelForm, LoanDetailsModelForm
@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.views import LoginView
 from django.utils.decorators import method_decorator
 
@@ -87,7 +88,7 @@ class LoanRequestCreateView(CreateView):
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanRequestListView(ListView):
     model = Loan
-    template_name = 'loan_approval/employee_loan_request.html'
+    template_name = 'loan_approval/applicant_loan_request.html'
     
     def get_queryset(self):
         queryset = self.model._default_manager.all()
@@ -147,7 +148,7 @@ def loanDetailsCreateView(request,pk):
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanDetailsListView(ListView):
     model = LoanDetails
-    template_name = 'loan_approval/detailed_loan_details.html'
+    template_name = 'loan_approval/loan_details_list.html'
     
     def get_queryset(self):
         queryset = self.model._default_manager
@@ -166,4 +167,30 @@ class LoanDetailsListView(ListView):
         else:
             # loan = LoanDetails.objects.filter(loan_request__managed_by = employee)
             return queryset.filter(loan_request__applicant_details = user)
-        
+
+@method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
+class LoanDetailsDetailView(DetailView):
+    model = LoanDetails
+    template_name = 'loan_approval/detailed_loan_details_.html'
+    
+def update_loan_request(request,id):
+    if request.method =="GET":
+        obj = get_object_or_404(Loan, id=id)
+        form = LoanRequestModelForm(request.GET or None, instance = obj)
+        return render(request, 'loan_approval/loan_update.html',{"form":form})
+    elif request.method =="POST":
+        # loan = Loan.objects.get(id = id)
+        loan_details = LoanDetails.objects.filter(loan_request__id = id)
+        if loan_details:
+            print(loan_details)
+            loan_details.delete()
+            print("Object deleted.")
+        obj = get_object_or_404(Loan, id=id)
+        form = LoanRequestModelForm(request.POST or None, instance = obj)
+        if form.is_valid():
+            print(form)
+            form.save()
+        else:
+            return render(request, 'loan_approval/loan_update.html',{"form":form})
+        return redirect("loan_approval:applicant_loan_list")
+    

@@ -20,6 +20,7 @@
     <li>{{ object.loan_request.emp_length }}</li>
     <li>{{ object.loan_request.home_ownership }}</li>
     <li>{{ object.loan_request.loan_amount }}</li>
+    <li><a href="{% url 'loan_approval:loan_details_detail' pk= {{ object.loan_request.id }}%}"></li>
     <hr/>
     <!-- If object_list is empty  -->
     {% empty %}
