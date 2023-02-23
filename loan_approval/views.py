@@ -211,6 +211,7 @@ def delete_loan(request,id):
         # home page
     return redirect("loan_approval:applicant_loan_list")
 
+@login_required
 def update_loan_details(request,pk):
     context = {}
     obj = get_object_or_404(LoanDetails, id = pk)
@@ -229,7 +230,7 @@ def update_loan_details(request,pk):
         form = LoanDetailsModelForm(request.POST or None, instance = obj)
         context['form'] = form
         if form.is_valid():
-            print(form)
+            # print(form)
             form.save()
         else:
             return render(request, 'loan_approval/loan_details_form.html',context)
