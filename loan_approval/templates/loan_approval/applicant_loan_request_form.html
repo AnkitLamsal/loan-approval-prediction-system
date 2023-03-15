@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Request Fom</title>
+    <link rel="stylesheet" href="{% static 'css/loan_request.css' %}" >
+</head>
+
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h2>MAKE A REQUEST FOR LOAN</h2>
+        <div class="form-group">
+            <label for="age">Age *</label>
+            {{form.person_age}}
+        </div>
+        <div class="form-group">
+            <label for="intent">Intent *</label>
+            {{form.loan_intent}}
+        </div>
+        <div class="form-group">
+            <label for="ownership">Ownership *</label>
+            {{form.home_ownership}}
+        </div>
+        <div class="form-group">
+            <label for="income">Income *</label>
+            {{form.income}}
+        </div>
+        <div class="form-group">
+            <label for="employment-length">Employment Length</label>
+            {{form.emp_length}}
+        </div>
+        <div class="form-group">
+            <label for="loan-amount">Loan Amount *</label>
+            {{form.loan_amount}}
+        </div>
+        <div class="form-group">
+            <label for="additional-info">Loan Manager</label>
+            <!-- <textarea id="additional-info" name="additional-info"></textarea> -->
+            {{form.managed_by}}
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script src="javascript/loan_request.js"></script>
+
+</body>
+<!-- {{form}} -->
+</html>

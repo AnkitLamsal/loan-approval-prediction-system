@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index,dashboard, applicant_register, employee_register, logout, loanDetailsCreateView, update_loan_request, delete_loan, update_loan_details
+from .views import index,dashboard,about,working, contact, applicant_register, employee_register, logout, loanDetailsCreateView, update_loan_request, delete_loan, update_loan_details
 from .views import LoanRequestCreateView, UserLoginView, LoanRequestListView, LoanListView, LoanDetailsListView, LoanDetailsDetailView
 from django.contrib.auth.views import LogoutView
 
@@ -7,6 +7,9 @@ app_name = "loan_approval"
 urlpatterns = [
     path('',index,name="index"),
     path('dashboard/',dashboard, name="dashboard"),
+    path("about/",about, name="about"),
+    path("how-it-works/",working, name="working"),
+    path("contact/",contact, name="contact"),
     path('applicant/register/',applicant_register,name='applicant_register'),
     path('employee/register/',employee_register,name='employee_register'),
     # Users related activities.

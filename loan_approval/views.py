@@ -22,7 +22,18 @@ def index(request):
 
 def dashboard(request):
     return render(request, 'loan_approval/dashboard.html',{})
-    
+
+def about(request):
+    return render(request, 'loan_approval/about.html',{})
+
+def contact(request):
+    return render(request, 'loan_approval/contact.html',{})
+
+def working(request):
+    return render(request, 'loan_approval/howitworks.html',{})
+
+# def apply_now(request):
+#     return render(request, 'loan_approval/about.html',{})
 # User Registration
 def applicant_register(request): 
     if request.method == "POST":
@@ -51,12 +62,12 @@ def employee_register(request):
         user_form = EmployeeModelForm()
     context = {'form':user_form}
     # TODO : change the applicant_registration form after front end submission. 
-    return render(request, 'loan_approval/applicant_registration.html',context)
+    return render(request, 'loan_approval/employee_registration.html',context)
     
 
 class UserLoginView(LoginView):
     redirect_authenticated_user = True
-    template_name = 'loan_approval/applicant_registration.html'
+    template_name = 'loan_approval/login.html'
     def get_success_url(self):
         return reverse_lazy('loan_approval:dashboard') 
     
@@ -76,7 +87,7 @@ class LoanRequestCreateView(CreateView):
     model = Loan
     form_class = LoanRequestModelForm
     success_url = reverse_lazy('loan_approval:dashboard')
-    template_name = 'loan_approval/applicant_create.html'
+    template_name = 'loan_approval/applicant_loan_request_form.html'
     
     def post(self, request, *args, **kwargs):
         form = self.get_form()

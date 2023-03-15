@@ -1,15 +1,91 @@
-<h1>Landing Page</h1>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartLAS</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <nav>
+      <div class="logos-section">
+        <h2 class="logo">
+          <a href="{% url 'loan_approval:index' %}">SmartLAS</a>
+        </h2>
+        <ul class="menu-items">
+          <li>
+            <a href="{% url 'loan_approval:index' %}">HOME</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:index' %}">HOW IT WORKS</a>
+          </li>
+          <li>
+            <a href="">ABOUT</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:contact'}">CONTACT</a>
+          </li>
+          {% if user.is_authenticated %}
+          {% else %}
+          <li>
+            <a href="{% url 'loan_approval:employee_register' %}">Employee Registration</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:applicant_register' %}">Applicant Registration</a>
+          {% endif %}
+          </li>
+        </ul>
+      </div>
+      <ul class="cta-btns">
+        {% if user.is_authenticated %}
+        <li>
+          <a class="cta-btns1" href="{% url 'loan_approval:user_logout' %}">LOGOUT</a>
+        </li>
+        {% else %}
+        <li>
+          <a class="cta-btns1" href="{% url 'loan_approval:user_login' %}">LOGIN</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
 
+    <main>
+      <section id="text-side">
+        <h1>SmartLAS <br />Get your loan in few minutes!</h1>
+        <p>SmartLAS is the easiest, safest and most trusted way to get loan.</p>
+        {% if user.is_superuser %}
+        <button
+          class="button"
+          onclick="window.location.href=`admin/`"
+        >
+          ADMIN PANEL
+        </button>
+        {% else %}
+        <button
+        class="button"
+        onclick="window.location.href=`{% url 'loan_approval:user_login' %}`"
+      >
+        APPLY LOANS
+      </button>
+        {% endif %}
+      </section>
 
-{% if user %}
+      <section id="img-side">
+        <img class="desktop-img" src="{% static 'images/desktop-img.png' %}" />
+      </section>
+    </main>
+
+    <!-- <footer>
+          <div class="attribution">
+            Copyright © SmartLAS 2023, All Right Reserved.
+          </div>
+        </footer> -->
+  </body>
+</html>
+
+<!-- {% if user %}
     {{user}} <br><br>
-{% endif %}
-
-<a href="{% url 'loan_approval:user_login' %}">User Login</a> <br><br>
-<a href="{% url 'loan_approval:applicant_register' %}">Applicant Registration</a> <br><br>
-<a href="{% url 'loan_approval:employee_register' %}">Employee Registration</a> <br><br>
-
-{% if user.is_authenticated %}
-    <a href="{% url 'loan_approval:user_logout' %}">User Logout</a> <br>    
-{% endif %}
-    
+{% endif %} -->
