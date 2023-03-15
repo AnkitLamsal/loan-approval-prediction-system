@@ -24,7 +24,8 @@ urlpatterns = [
     # Employee related scenarios
     path('loan/',LoanListView.as_view(), name='employee_loan_list'),
     path("loan-details/create/<int:pk>/",loanDetailsCreateView, name='loan_details_create'),
-    path("loan-details/",LoanDetailsListView.as_view(),name="loans_details_list"),
     path("loan-details/<int:pk>/",LoanDetailsDetailView.as_view(), name="loan_details_detail"),
     path('loan-details/update/<int:pk>/',update_loan_details,name='loan_details_update'),
+    # Both Perspective
+    path("loan-details/",LoanDetailsListView.as_view(),name="loans_details_list"),
 ]

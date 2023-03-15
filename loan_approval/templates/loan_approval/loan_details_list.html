@@ -1,31 +1,62 @@
-<h3>Loan Details Details {{request.user}}</h3>
-<ul>
-{% if request.user.employee %}
-<h3>Employee View Loan Prediction Details </h3>
-    <!-- Iterate over object_list -->
-    {% for object in object_list %}
-    <!-- Display Objects -->
-    <li>{{ object.credit_history }}</li>
-    <li>{{ object.credit_default }}</li>
-    <li>{{ object.interest_rate }}</li>
-    <hr/>
-    <!-- If object_list is empty  -->
-    {% empty %}
-    <li>No objects yet.</li>
-    {% endfor %}
-{% elif request.user.applicant %}
-<h3>Applicant Loan Prediction Details </h3>
-    {% for object in object_list %}
-    <!-- Display Objects -->
-    <li>{{ object.loan_request.emp_length }}</li>
-    <li>{{ object.loan_request.home_ownership }}</li>
-    <li>{{ object.loan_request.loan_amount }}</li>
-    <li><a href="{% url 'loan_approval:loan_details_detail' pk=object.loan_request.id%}"></li>
-    <hr/>
-    <!-- If object_list is empty  -->
-    {% empty %}
-    <li>No objects yet.</li>
-    {% endfor %}
+{% if user.is_authenticated %}
+    
+{% if not request.user.is_super_user %}
+<style>
+    table,td, tr{
+        border:2px black solid;
+    }
+</style>    
+<h3>View Approved Loans {{request.user}}</h3>
+<table>
+<tr>
+    {% if request.user.applicant %}
+    <td>Requested Applicants Name</td>
+    <td> Loan Manager </td>
+    <td>Applicant Employment Length</td>
+    <td>Intention of Loan</td>
+    <td>Amount Applied</td>
+    <td> Prediction Approval </td>
+    <td>Loan Details</td>
+    {% endif %}
+    {% if request.user.employee %}
+    <td>Requested Applicants Name</td>
+    <td>Applicant Employment Length</td>
+    <td>Intention of Loan</td>
+    <td>Amount Applied</td>
+    <td>Credit History</td>
+    <td>Credit Default</td>
+    <td>Loan Interest Rate</td>
+    <td> Prediction Approval </td>
+    <td>Loan Details</td>
+    {% endif %}
+</tr>
+{% for object in object_list %}
+<tr>
+    {% if request.user.applicant %}
+    <td>{{ object.loan_request.applicant_details }}</td>
+    <td> {{ object.loan_request.managed_by }} </td>
+    <td>{{ object.loan_request.emp_length }}</td>
+    <td>{{ object.loan_request.loan_intent }}</td>
+    <td>{{ object.loan_request.loan_amount }}</td>
+    <td> Prediction Action </td>
+    <td><a href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
+    {% endif %}
+    {% if request.user.employee %}
+    <td>{{ object.loan_request.applicant_details }}</td>
+    <td>{{ object.loan_request.emp_length }}</td>
+    <td>{{ object.loan_request.loan_intent }}</td>
+    <td>{{ object.loan_request.loan_amount }}</td>
+    <td>{{ object.credit_history }}</td>
+    <td>{{ object.credit_default }}</td>
+    <td>{{ object.interest_rate }}</td>
+        <td> <a href="#"> Predict</a> </td>
+    <td><a href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
+    {% endif %}
+</tr>
+{% endfor %}
+{% else %}
+403 Error: Not auth
 {% endif %}
-</ul>
-
+{% else %}
+404 Error 
+{% endif %}
