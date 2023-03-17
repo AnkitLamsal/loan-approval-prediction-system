@@ -75,8 +75,8 @@ class Model:
         return self.df
         
     def process_booleans(self,boolean):
-        print("Hello")
-        print(type(boolean))
+        # print("Hello")
+        # print(type(boolean))
         if boolean == True:
             return 1
         elif boolean == False:
@@ -90,10 +90,10 @@ class Model:
         self.ohe_pipeline, self.ohe_features = self.load_file("pickle_files/ohe_pipeline.pkl")
         scaled_X = pd.DataFrame(new_X, columns = self.numeric_features+self.binary_features+self.categorical_features)
         # print(scaled_X)
-        print(scaled_X.iloc[0])
+        # print(scaled_X.iloc[0])
         transformed = self.ohe_pipeline.transform(scaled_X)
         transformed_df = pd.DataFrame(transformed, columns=self.ohe_features)
-        print(transformed_df.iloc[0])
+        # print(transformed_df.iloc[0])
         arr_X = transformed_df.to_numpy()
         return arr_X
         

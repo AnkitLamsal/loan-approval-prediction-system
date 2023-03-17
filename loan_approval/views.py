@@ -78,31 +78,11 @@ def logout_view(request):
     logout(request)
     return redirect('loan_approval:index')
 
-
-# @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
-# class LoanRequestCreateView(CreateView):
-#     model = Loan
-#     form_class = LoanRequestModelForm
-#     success_url = reverse_lazy('loan_approval:dashboard')
-#     template_name = 'loan_approval/applicant_loan_request_form.html'
-    
-#     def post(self, request, *args, **kwargs):
-#         form = self.get_form()
-#         print(type(form))
-#         if(self.request.user.is_staff == False):
-#             # print(form)
-#             # print(self.request.user.applicant)
-#             form.instance.applicant_details = self.request.user.applicant
-#             print(type(form))
-#             if form.is_valid():
-#                 return self.form_valid(form)
-#             else:
-#                 return self.form_invalid(form)
-
+@method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanRequestCreateView(CreateView):
     model = Loan
     form_class = LoanRequestModelForm
-    success_url = reverse_lazy('loan_approval:dashboard')
+    success_url = reverse_lazy('loan_approval:applicant_loan_list')
     template_name = 'loan_approval/applicant_loan_request_form.html'
     
     def post(self, request, *args, **kwargs):
@@ -118,8 +98,7 @@ class LoanRequestCreateView(CreateView):
             else:
                 return self.form_invalid(form)
         else:
-            return HttpResponse("Hello World")
-    
+            return HttpResponse("<h3>Super Admin and Employee cannot request for loan. </h3>")
         
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanRequestListView(ListView):
@@ -148,7 +127,6 @@ class LoanListView(ListView):
             return queryset
         else:
             return queryset.filter(managed_by = user)
-
 
 @login_required(login_url=reverse_lazy('loan_approval:user_login'))
 def loanDetailsCreateView(request,pk):
@@ -218,7 +196,7 @@ class LoanDetailsDetailView(DetailView):
     model = LoanDetails
     template_name = 'loan_approval/detailed_loan_details_.html'
 
-@login_required
+@login_required(login_url=reverse_lazy('loan_approval:user_login'))
 def update_loan_request(request,id):
     if request.method =="GET":
         obj = get_object_or_404(Loan, id=id)
@@ -240,17 +218,23 @@ def update_loan_request(request,id):
             return render(request, 'loan_approval/loan_update.html',{"form":form})
         return redirect("loan_approval:applicant_loan_list")
 
-@login_required
+@login_required(login_url=reverse_lazy('loan_approval:user_login'))
 def delete_loan(request,id):
     # fetch the object related to passed id
-    obj = get_object_or_404(Loan, id = id)
-    # delete object
-    obj.delete()
-    # after deleting redirect to
-        # home page
-    return redirect("loan_approval:applicant_loan_list")
+    if request.user.is_authenticated:
+        condition1 = request.user.is_staff
+        condition2 = request.user.is_superuser
+        print(condition1, condition2)
+        if not (condition1 or condition2):
+            obj = get_object_or_404(Loan, id = id)
+            # delete object
+            obj.delete()
+            # after deleting redirect to home page.
+            return redirect("loan_approval:applicant_loan_list")
+        else:
+            return HttpResponse("<h3> SuperAdmin or Employee cannot delete loan request. </h3>")
 
-@login_required
+@login_required(login_url=reverse_lazy('loan_approval:user_login'))
 def update_loan_details(request,pk):
     context = {}
     obj = get_object_or_404(LoanDetails, id = pk)
@@ -276,25 +260,41 @@ def update_loan_details(request,pk):
         else:
             return render(request, 'loan_approval/loan_details_form.html',context)
 
+@login_required(login_url=reverse_lazy('loan_approval:user_login'))
 def predict(request,pk):
+    # print(not request.user.is_superuser)
+    condition1 = request.user.is_superuser
+    condition2 = request.user.is_authenticated
+    # print(condition1 and condition2 )
+    if  condition2:
     # Function used by machine learning.
-    obj = get_object_or_404(Loan, id = pk)
-    model = create_model(obj)
-    loan_status = model.predict_data()
-    # Pipelining and others.
-    # print(obj.loanprediction)
-    prediction_status = True
-    prediction_object = obj.loanprediction
-    # print(prediction_object)
-    prediction_object.prediction_status = prediction_status
-    prediction_object.loan_status = loan_status
-    prediction_object.save()
-    print(prediction_object, prediction_object.loan_status, prediction_object.prediction_status)
-    # prediction_object.objects.update(prediction_status = True, loan_status= loan_status)    
-    context = {}
-    context['prediction']  = loan_status
-    # print(context)
-    return JsonResponse(context, status=200)
+        if condition1:
+            context = {}
+            context['error'] = "403: Super user cannot look after loan approval prediction."
+            return JsonResponse(context, status=403)
+        else:
+            obj = get_object_or_404(Loan, id = pk)
+            model = create_model(obj)
+            loan_status = model.predict_data()
+            # Pipelining and others.
+        # print(obj.loanprediction)
+            prediction_status = True
+            prediction_object = obj.loanprediction
+            # print(prediction_object)
+            prediction_object.prediction_status = prediction_status
+            prediction_object.loan_status = loan_status
+            prediction_object.save()
+            print(prediction_object, prediction_object.loan_status, prediction_object.prediction_status)
+            # prediction_object.objects.update(prediction_status = True, loan_status= loan_status)    
+            context = {}
+            context['prediction']  = loan_status
+            # print(context)
+            return JsonResponse(context, status=200)
+    else:
+        context = {}
+        context['error'] = "404:  cannot view loan approval prediction."
+        return JsonResponse(context, status=404)
+        
 
 def create_model(loan):
     person_age = loan.person_age
@@ -323,6 +323,3 @@ def create_model(loan):
         credit_history_length = credit_history
     )
     return model
-    
-    
-    

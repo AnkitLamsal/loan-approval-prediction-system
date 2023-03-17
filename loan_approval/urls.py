@@ -19,7 +19,7 @@ urlpatterns = [
     path('loan/request/',LoanRequestCreateView.as_view(),name="loan_request"),
     path('loan/list/',LoanRequestListView.as_view(), name='applicant_loan_list'),
     path('loan/update/<int:id>/',update_loan_request, name='loan_update'),
-    path("loan/delete/<int:id>",delete_loan, name='loan_delete'),
+    path("loan/delete/<int:id>/",delete_loan, name='loan_delete'),
     
     # Employee related scenarios
     path('loan/',LoanListView.as_view(), name='employee_loan_list'),
