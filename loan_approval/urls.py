@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index,dashboard,about,working, contact, applicant_register, employee_register, logout, loanDetailsCreateView, update_loan_request, delete_loan, update_loan_details
+from .views import index,dashboard,about,working, contact, applicant_register, employee_register, logout, loanDetailsCreateView, update_loan_request, delete_loan, update_loan_details, predict
 from .views import LoanRequestCreateView, UserLoginView, LoanRequestListView, LoanListView, LoanDetailsListView, LoanDetailsDetailView
 from django.contrib.auth.views import LogoutView
 
@@ -28,4 +28,5 @@ urlpatterns = [
     path('loan-details/update/<int:pk>/',update_loan_details,name='loan_details_update'),
     # Both Perspective
     path("loan-details/",LoanDetailsListView.as_view(),name="loans_details_list"),
+    path("loan/predict/<int:pk>/",predict, name='predict'),
 ]

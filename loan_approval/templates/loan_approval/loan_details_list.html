@@ -6,7 +6,7 @@
         border:2px black solid;
     }
 </style>    
-<h3>View Approved Loans {{request.user}}</h3>
+<h3>Check Approved Loans {{request.user}}</h3>
 <table>
 <tr>
     {% if request.user.applicant %}
@@ -38,7 +38,12 @@
     <td>{{ object.loan_request.emp_length }}</td>
     <td>{{ object.loan_request.loan_intent }}</td>
     <td>{{ object.loan_request.loan_amount }}</td>
-    <td> Prediction Action </td>
+    {% comment %} <td><a href="{% url 'loan_approval:predict' pk=object.loan_request.id%}">Details</a></td> {% endcomment %}
+    <td>
+        <input type="button" class="predict-button-{{object.loan_request.id}}" value="Predict"
+                        onclick="submit({id: {{object.loan_request.id}}})" />
+        <h3 class="hello-{{object.loan_request.id}}"></h3>
+    </td>
     <td><a href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
     {% endif %}
     {% if request.user.employee %}
@@ -49,7 +54,7 @@
     <td>{{ object.credit_history }}</td>
     <td>{{ object.credit_default }}</td>
     <td>{{ object.interest_rate }}</td>
-        <td> <a href="#"> Predict</a> </td>
+    <td> <a href="#"> Predict</a> </td>
     <td><a href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
     {% endif %}
 </tr>
@@ -60,3 +65,32 @@
 {% else %}
 404 Error 
 {% endif %}
+
+<script>
+    function submit({
+        id
+    }) {
+        fetch(`/loan/predict/${id}/`)
+            .then(response => response.json())
+            .then(data => manipulate(data,id))
+    };
+    function manipulate(data,id){
+        console.log(data);
+        //console.log(id);
+        prediction_button = document.querySelector(`.predict-button-${id}`);
+        //console.log(`predict-button-${id}`);
+        //console.log(prediction_button);
+        prediction = document.querySelector(`.hello-${id}`);
+        //console.log(prediction)
+        console.log(data['prediction']);
+        prediction_button.style.display = "none";
+        if(data['prediction']==false){
+            prediction.innerText = "Rejected.";    
+        }
+        else{
+            prediction.innerText = "Approved.";
+        }
+        //
+        //document.querySelector('.beruju_hide').style.display = "block";
+    }
+</script>

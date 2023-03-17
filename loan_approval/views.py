@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse  
 from .models import Loan, Applicant, Employee, LoanDetails, LoanPrediction
 from .forms import LoanRequestModelForm,ApplicantModelForm, EmployeeModelForm, LoanDetailsModelForm
 from django.urls import reverse,reverse_lazy
@@ -12,6 +12,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.views import LoginView
 from django.utils.decorators import method_decorator
+from .utils import Model
 
 # Create your views here.
 # def hello_world(request):
@@ -246,3 +247,53 @@ def update_loan_details(request,pk):
         else:
             return render(request, 'loan_approval/loan_details_form.html',context)
         return redirect("loan_approval:applicant_loan_list")
+
+def predict(request,pk):
+    # Function used by machine learning.
+    obj = get_object_or_404(Loan, id = pk)
+    model = create_model(obj)
+    model.predict_data()
+    # Pipelining and others.
+    prediction_status = True
+    loan_status = False
+    try:
+        r1 = LoanPrediction.objects.create(loan_data = obj, prediction_status= prediction_status, loan_status=loan_status)
+        print("Object Created.")
+    except:
+        print("Hello")
+        r1 = obj.loanprediction
+    context = {}
+    context['prediction']  = r1.loan_status
+    # print(context)
+    return JsonResponse(context, status=200)
+
+def create_model(loan):
+    person_age = loan.person_age
+    income = loan.income
+    intent = loan.loan_intent
+    emp_length = loan.emp_length
+    amount = loan.loan_amount
+    ownership = loan.home_ownership
+    credit_history = loan.loandetails.credit_history
+    rate = loan.loandetails.interest_rate
+    default = loan.loandetails.credit_default
+    grade = loan.loandetails.grade
+    percent_to_income = loan.loandetails.loan_percent_to_income
+    print(person_age)
+    model = Model(
+        person_age = person_age,
+        person_income = income,
+        home_ownership = ownership,
+        employment_length = emp_length,
+        intent = intent,
+        grade = grade,
+        amount = amount,
+        interest_rate = rate,
+        percent_to_income = percent_to_income,
+        default_on_file = default,
+        credit_history_length = credit_history
+    )
+    return model
+    
+    
+    

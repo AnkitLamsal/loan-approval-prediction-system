@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+# import NewLabelBinarizer
 
 
 def main():
@@ -19,4 +20,9 @@ def main():
 
 
 if __name__ == '__main__':
+    from loan_approval.NewLabelBinarizer import NewLabelBinarizer
+    from loan_approval.node import Node
+    from loan_approval import decision_tree
+    # from loan_approval.random_forest import RandomForest    
+    # from loan_approval.decision_tree import DecisionTree
     main()
