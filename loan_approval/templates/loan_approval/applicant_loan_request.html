@@ -1,5 +1,5 @@
 {% load static %}
-
+{% if user.is_authenticated %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,29 +12,29 @@
 </head>
 
 <body>
-<ul>
-    <!-- Iterate over object_list -->
-    <li>Object name &nbsp; Home Ownership &nbsp; Employee Length &nbsp; Loan Amount &nbsp; Applicant &nbsp; Manager &nbsp;</li>
-    {% for object in object_list %}
-    <!-- Display Objects -->
-    {% if not object.loandetails %}
-    <li>
-        {{ object }} &nbsp; {{object.home_ownership}} &nbsp; {{object.emp_length}} &nbsp; {{object.loan_amount}}
-        &nbsp; {{object.applicant_details}} &nbsp; {{object.managed_by}}<br>
-        {% comment %} <a href="{% url 'loan_approval:loan_update id={{object.id}}' %}">Update</a></li> {% endcomment %}
-        <a href="{% url 'loan_approval:loan_update' object.id %}">Update</a>
-        <a href="{% url 'loan_approval:loan_delete' object.id %}">Delete</a>
-    </li>
+    {% if not user.is_staff %}
+    <ul>
+        <!-- Iterate over object_list -->
+        <li>Object name &nbsp; Home Ownership &nbsp; Employee Length &nbsp; Loan Amount &nbsp; Applicant &nbsp; Manager &nbsp;</li>
+        {% for object in object_list %}
+        <!-- Display Objects -->
+            {% if not object.loandetails %}
+            <li>
+                {{ object }} &nbsp; {{object.home_ownership}} &nbsp; {{object.emp_length}} &nbsp; {{object.loan_amount}}
+                &nbsp; {{object.applicant_details}} &nbsp; {{object.managed_by}}<br>
+            {% comment %} <a href="{% url 'loan_approval:loan_update id={{object.id}}' %}">Update</a></li> {% endcomment %}
+                <a href="{% url 'loan_approval:loan_update' object.id %}">Update</a>
+                <a href="{% url 'loan_approval:loan_delete' object.id %}">Delete</a>
+            </li>
+            {% endif%}
+        {% endfor %}
+    </ul>
+    {% else %}
+    <h3>Employee or super admin cannot request loans.</h3>
     {% endif%}
-    {% comment %} <li>{{ object.description }}</li> {% endcomment %}
-   
-    {% comment %} <hr/> {% endcomment %}
-    <!-- If object_list is empty  -->
-    {% empty %}
-    <li>No objects yet.</li>
-    {% endfor %}
-</ul>
 <script src="javascript/loan_request.js"></script>
 </body>
-
 </html>
+{% else %}
+Hello
+{% endif %}

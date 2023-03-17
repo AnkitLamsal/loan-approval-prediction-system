@@ -1,6 +1,5 @@
 {% if user.is_authenticated %}
-    
-{% if not request.user.is_super_user %}
+{% if not request.user.is_superuser %}
 <style>
     table,td, tr{
         border:2px black solid;
@@ -54,13 +53,15 @@
     <td>{{ object.credit_history }}</td>
     <td>{{ object.credit_default }}</td>
     <td>{{ object.interest_rate }}</td>
-    <td> <a href="#"> Predict</a> </td>
+    <td> <input type="button" class="predict-button-{{object.loan_request.id}}" value="Predict"
+        onclick="submit({id: {{object.loan_request.id}}})" />
+<h3 class="hello-{{object.loan_request.id}}"></h3></td>
     <td><a href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
     {% endif %}
 </tr>
 {% endfor %}
 {% else %}
-403 Error: Not auth
+403 Error: Not authorized
 {% endif %}
 {% else %}
 404 Error 

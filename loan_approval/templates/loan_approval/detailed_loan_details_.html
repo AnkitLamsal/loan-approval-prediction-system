@@ -1,3 +1,4 @@
+{% if user.is_authenticated %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,39 +10,35 @@
     <link rel="stylesheet" href="{% static 'css/loan_details.css' %}">
 </head>
 <body>
-    <form>
-        <h2>LOAN DETAILS</h2>
-        <label for="credit-history">Credit History:</label>
-        <select id="credit-history" name="credit-history">
-          <option value="excellent">Excellent</option>
-          <option value="good">Good</option>
-          <option value="fair">Fair</option>
-          <option value="poor">Poor</option>
-        </select>
-        <label for="interest-rate">Interest Rate:</label>
-        <input type="number" id="interest-rate" name="interest-rate" step="0.01" min="0" required>
-        <label for="grade">Grade:</label>
-        <select id="grade" name="grade">
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-          <option value="D">D</option>
-          <option value="E">E</option>
-        </select>
-        <label for="loan-percent-to-income">Loan Percent to Income:</label>
-        <input type="number" id="loan-percent-to-income" name="loan-percent-to-income" step="0.01" min="0" required>
-        <label for="loan-request-home">Loan Request Home:</label>
-        <input type="number" id="loan-request-home" name="loan-request-home" step="0.01" min="0" required>
-        <button type="submit">SUBMIT</button>
-      </form>
-      
-      <div id="result"></div>
-       
-{% comment %} </body>
-</html> {% endcomment %}
-
-<h3>{{object.credit_history}}</h3>
-<h3>{{object.interest_rate}}</h3>
-<h3>{{object.grade}}</h3>
-<h3>{{object.loan_percent_to_income}}</h3>
-<h3>{{object.loan_request.home}}</h3> 
+  {% if not user.is_superuser %}
+  {% if user.is_staff %}
+  <h1>Loan Details</h1>
+  <h3>Credit history: {{object.credit_history}}</h3>
+  <h3>Grade: {{object.grade}}</h3>
+  <h3>Interest: {{object.interest_rate}}</h3>
+  <h3>Credit Default: {{object.credit_default}}</h3>
+  <h3>Loan Percent to income: {{object.loan_percent_to_income}}</h3>
+  <h3>Home Ownership: {{object.loan_request.home_ownership}}</h3>
+  <h3>Employment Length:{{object.loan_request.emp_length}}</h3>
+  <h3>Loan Amount:{{object.loan_request.loan_amount}}</h3>
+  <h3>Age :{{object.loan_request.person_age}}</h3>
+  <h3>Income:{{object.loan_request.income}}</h3>
+  <h3>Loan Intent:{{object.loan_request.loan_intent}}</h3>
+  <h3>Applicant Name:{{object.loan_request.applicant_details}}</h3>
+  {% else %}
+  <h3>Home Ownership: {{object.loan_request.home_ownership}}</h3>
+  <h3>Employment Length:{{object.loan_request.emp_length}}</h3>
+  <h3>Loan Amount:{{object.loan_request.loan_amount}}</h3>
+  <h3>Age :{{object.loan_request.person_age}}</h3>
+  <h3>Income:{{object.loan_request.income}}</h3>
+  <h3>Loan Intent:{{object.loan_request.loan_intent}}</h3>
+  <h3>Loan Manager:{{object.loan_request.managed_by}}</h3>
+  {% endif %}
+  {% else %}
+  <h3> Super user not authorized. </h3>
+  {% endif %}
+</body>
+</html>
+{% else %}
+404 error
+{% endif %}

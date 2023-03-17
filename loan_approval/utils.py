@@ -40,6 +40,7 @@ class Model:
     def load_file(self,file_name):
         sys.modules['decision_tree'] = decision_tree
         sys.modules['node'] = node
+        sys.modules['random_forest'] = random_forest
         # sys.modules['']
         file_path = os.path.join(settings.BASE_DIR, "loan_approval/"+file_name)
         with open(file_path,"rb") as file:
@@ -102,7 +103,8 @@ class Model:
         self.df = self.create_dataframe()
         X = self.preprocess_data(self.df)
         self.dtree_pipeline = self.open_files("pickle_files/dtree.pkl")
-        prediction = self.dtree_pipeline.predict(X)
+        self.rf_pipeline = self.open_files("pickle_files/rf.pkl")
+        prediction = self.rf_pipeline.predict(X)
         if prediction[0] == 0:
             return False
         elif prediction[0] == 1:

@@ -1,3 +1,4 @@
+{% if user.is_authenticated %}
 {% if not user.is_staff %}
 {% load static %}
 <!DOCTYPE html>
@@ -60,5 +61,8 @@
 <!-- {{form}} -->
 </html>
 {% else%}
-Error: Employee cannot fill the form.
+<h3>Employee or super admin cannot request loans.</h3>
 {% endif %}
+{% else %}
+<h3>403 error: User not authorized</h3>
+{% endif%}

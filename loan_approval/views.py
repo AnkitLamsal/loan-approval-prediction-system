@@ -105,6 +105,21 @@ class LoanRequestCreateView(CreateView):
     success_url = reverse_lazy('loan_approval:dashboard')
     template_name = 'loan_approval/applicant_loan_request_form.html'
     
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        form = self.get_form()
+        if (self.request.user.is_staff == False):
+            if form.is_valid():
+                form.instance.applicant_details = self.request.user.applicant
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+        else:
+            return HttpResponse("Hello World")
+    
         
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanRequestListView(ListView):
@@ -135,7 +150,7 @@ class LoanListView(ListView):
             return queryset.filter(managed_by = user)
 
 
-@login_required
+@login_required(login_url=reverse_lazy('loan_approval:user_login'))
 def loanDetailsCreateView(request,pk):
     context = {}
     queryset = Loan.objects.get(id=pk)
@@ -267,10 +282,17 @@ def predict(request,pk):
     model = create_model(obj)
     loan_status = model.predict_data()
     # Pipelining and others.
+    # print(obj.loanprediction)
     prediction_status = True
     prediction_object = obj.loanprediction
+    # print(prediction_object)
+    prediction_object.prediction_status = prediction_status
+    prediction_object.loan_status = loan_status
+    prediction_object.save()
+    print(prediction_object, prediction_object.loan_status, prediction_object.prediction_status)
+    # prediction_object.objects.update(prediction_status = True, loan_status= loan_status)    
     context = {}
-    context['prediction']  = True
+    context['prediction']  = loan_status
     # print(context)
     return JsonResponse(context, status=200)
 

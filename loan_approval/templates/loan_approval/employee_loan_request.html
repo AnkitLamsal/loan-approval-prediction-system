@@ -1,4 +1,18 @@
-{% if user.is_staff %}
+{% if user.is_authenticated %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLAS - Loan details</title>
+    <link rel="stylesheet" href="{% static 'css/loan_details.css' %}">
+</head>
+<body>
+{% if user.is_superuser %}
+<h3>403: Applicant and super admin not authorized.</h3>
+{% elif  user.is_staff %}
 <ul>
     <!-- Iterate over object_list -->
     <li>Object name &nbsp; Home Ownership &nbsp; Employee Length &nbsp; Loan Amount &nbsp; Applicant &nbsp; Manager &nbsp;</li>
@@ -27,4 +41,11 @@
     <li>No objects yet.</li>
     {% endfor %}
 </ul>
+{% else %}
+<h3>403: Applicant and super admin not authorized.</h3>
+{% endif %}
+</body>
+</html>
+{% else%}
+404: Cannot view this page.
 {% endif %}

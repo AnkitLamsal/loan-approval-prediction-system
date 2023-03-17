@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    {% if not user.is_staff %}
         <form method="post">
             {% csrf_token %}
             <h2>UPDATE LOANS</h2>
@@ -52,7 +53,9 @@
             {{form.managed_by.errors}}
             <input type="submit" value="Submit">
         </form>
-    
+        {% else %}
+<h3>Employee or Super User cannot update the record</h3>
+{% endif %}
 
     <script src="javascript/loan_request.js"></script>
 

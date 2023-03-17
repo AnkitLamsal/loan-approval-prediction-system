@@ -50,9 +50,18 @@
         </ul>
       </div>
       <ul class="cta-btns">
+        {% if user.is_authenticated %}
+        <li>
+          <div >{{request.user}} </div>
+        </li>
         <li>
           <a class="cta-btns1" href="{% url 'loan_approval:user_logout' %}">LOGOUT</a>
         </li>
+        {% else %}
+        <li>
+          <a class="cta-btns1" href="{% url 'loan_approval:user_login' %}">LOGIN</a>
+        </li>
+        {% endif %}
       </ul>
     </nav>
 
@@ -60,14 +69,39 @@
       <section id="text-side">
         <h1>SmartLAS <br />Get your loan in few minutes!</h1>
         <p>SmartLAS is the easiest, safest and most trusted way to get loan.</p>
+        {% if not user.is_authenticated %}
+
+      <button
+      class="button"
+      onclick="window.location.href=`{% url 'loan_approval:user_login' %}`"
+    >
+      APPLY LOANS
+    </button>
+        {% else %}
+        {% if user.is_superuser %}
         <button
           class="button"
-          onclick="window.location.href=`{% url 'loan_approval:loan_request' %}`"
+          onclick="window.location.href=`admin/`"
         >
-          APPLY NOW
+          ADMIN PANEL
         </button>
+        {% elif user.is_staff %}
+        <button
+        class="button"
+        onclick="window.location.href=`{% url 'loan_approval:employee_loan_list' %}`"
+      >
+        PROVIDE LOAN DATA
+      </button>
+      {% else %}
+      <button
+      class="button"
+      onclick="window.location.href=`{% url 'loan_approval:loan_request' %}`"
+    >
+      APPLY LOANS
+    </button>
+        {% endif %}
+      {% endif%}
       </section>
-
       <section id="img-side">
         <img class="desktop-img" src="{% static 'images/desktop-img.png' %}" />
       </section>
@@ -81,5 +115,5 @@
   </body>
 </html>
 {% else %}
-<h3>404 error</h3>
+<h3>403 error: User not authorized</h3>
 {% endif %}
