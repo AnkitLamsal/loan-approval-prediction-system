@@ -18,27 +18,44 @@
           <!-- <input type="text" required /> -->
           {{form.username}}
           <label>Full Name</label>
-          {{form.username.errors}}
         </div>
+        {% if  form.username.errors %}
+        <br>
+        {{form.username.errors}}
+        <br>
+        {% endif %}
         <div class="field">
           <!-- <input type="text" required /> -->
           {{form.email}}
           <label>Email Address</label>
-          {{form.email.errors}}
         </div>
+
+        {% if  form.email.errors %}
+        <br>
+        {{form.email.errors}}
+        <br>
+        {% endif %}
         <div class="field">
-          <!-- <input type="password" required /> -->
           {{form.password1}}
           <label>Password</label>
-          {{form.password1.errors}}
         </div>
+        
+        {% if form.password1.errors %}
+        <br>
+        {{form.password1.errors}}
+        <br>
+        {% endif %}
+          
         <div class="field">
-          <!-- <input type="password" required /> -->
           {{form.password2}}
           <label>Confirm Password</label>
-          {{form.password2.errors}}
         </div>
-        <div class="content">
+        {% if form.password2.errors %}
+          <br>
+          {{form.password2.errors}}
+          <br>
+          {% endif %}
+          <div class="content">
           <div class="checkbox">
             <input type="checkbox" id="remember-me" />
             <label for="remember-me">Agree to terms and conditions</label>

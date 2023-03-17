@@ -12,64 +12,20 @@
 </head>
 
 <body>
-    <form class="loan-request-form">
-        <h2>MAKE A REQUEST FOR LOAN</h2>
-        <div class="form-group">
-            <label for="age">Age *</label>
-            <input type="number" id="age" name="age" required>
-        </div>
-        <div class="form-group">
-            <label for="intent">Intent *</label>
-            <select id="intent" name="intent" required>
-                <option value=""></option>
-                <option value="Personal">Personal</option>
-                <option value="Business">Business</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="ownership">Ownership *</label>
-            <select id="ownership" name="ownership" required>
-                <option value=""></option>
-                <option value="Own">Own</option>
-                <option value="Rent">Rent</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="income">Income *</label>
-            <input type="number" id="income" name="income" required>
-        </div>
-        <div class="form-group">
-            <label for="employment-length">Employment Length</label>
-            <input type="number" id="employment-length" name="employment-length" required>
-        </div>
-        <div class="form-group">
-            <label for="loan-amount">Loan Amount *</label>
-            <input type="number" id="loan-amount" name="loan-amount" required>
-        </div>
-        <div class="form-group">
-            <label for="additional-info">Additional Information</label>
-            <textarea id="additional-info" name="additional-info"></textarea>
-        </div>
-        <input type="submit" value="Submit">
-    </form>
-
-    <script src="javascript/loan_request.js"></script>
-
-</body>
-
-</html>
-
 <ul>
     <!-- Iterate over object_list -->
     <li>Object name &nbsp; Home Ownership &nbsp; Employee Length &nbsp; Loan Amount &nbsp; Applicant &nbsp; Manager &nbsp;</li>
     {% for object in object_list %}
     <!-- Display Objects -->
+    {% if not object.loandetails %}
     <li>
         {{ object }} &nbsp; {{object.home_ownership}} &nbsp; {{object.emp_length}} &nbsp; {{object.loan_amount}}
         &nbsp; {{object.applicant_details}} &nbsp; {{object.managed_by}}<br>
         {% comment %} <a href="{% url 'loan_approval:loan_update id={{object.id}}' %}">Update</a></li> {% endcomment %}
         <a href="{% url 'loan_approval:loan_update' object.id %}">Update</a>
         <a href="{% url 'loan_approval:loan_delete' object.id %}">Delete</a>
+    </li>
+    {% endif%}
     {% comment %} <li>{{ object.description }}</li> {% endcomment %}
    
     {% comment %} <hr/> {% endcomment %}
@@ -78,3 +34,7 @@
     <li>No objects yet.</li>
     {% endfor %}
 </ul>
+<script src="javascript/loan_request.js"></script>
+</body>
+
+</html>

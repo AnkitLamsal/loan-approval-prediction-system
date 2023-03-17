@@ -11,43 +11,50 @@
 </head>
 
 <body>
-    <form method="post">
-        {% csrf_token %}
-        <h2>UPDATE LOANS</h2>
-        <div class="form-group">
-            <label for="age">Age *</label>
-            {{form.person_age}}
-        </div>
-        <div class="form-group">
-            <label for="intent">Intent *</label>
-            {{form.loan_intent}}
-        </div>
-        <div class="form-group">
-            <label for="ownership">Ownership *</label>
-            {{form.home_ownership}}
-        </div>
-        <div class="form-group">
-            <label for="income">Income *</label>
-            {{form.income}}
-        </div>
-        <div class="form-group">
-            <label for="employment-length">Employment Length</label>
-            {{form.emp_length}}
-        </div>
-        <div class="form-group">
-            <label for="loan-amount">Loan Amount *</label>
-            {{form.loan_amount}}
-        </div>
-        <div class="form-group">
-            <label for="additional-info">Loan Manager</label>
-            <!-- <textarea id="additional-info" name="additional-info"></textarea> -->
-            {{form.managed_by}}
-        </div>
-        <input type="submit" value="Submit">
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            <h2>UPDATE LOANS</h2>
+                <div class="form-group">
+                <label for="age">Age *</label>
+                {{form.person_age}}
+            </div>
+            {{form.person_age.errors}}
+            <div class="form-group">
+                <label for="intent">Intent *</label>
+                {{form.loan_intent}}
+            </div>
+            {{form.loan_intent.errors}}
+            <div class="form-group">
+                <label for="ownership">Ownership *</label>
+                {{form.home_ownership}}
+            </div>
+            {{form.home_ownership.errors}}
+            <div class="form-group">
+                <label for="income">Income *</label>
+                {{form.income}}
+            </div>
+            {{form.income.errors}}
+            <div class="form-group">
+                <label for="employment-length">Employment Length</label>
+                {{form.emp_length}}
+            </div>
+            {{form.emp_length.errors}}
+            <div class="form-group">
+                <label for="loan-amount">Loan Amount *</label>
+                {{form.loan_amount}}
+            </div>
+            {{form.loan_amount.errors}}
+            <div class="form-group">
+                <label for="additional-info">Loan Manager</label>
+                <!-- <textarea id="additional-info" name="additional-info"></textarea> -->
+                {{form.managed_by}}
+            </div>
+            {{form.managed_by.errors}}
+            <input type="submit" value="Submit">
+        </form>
+    
 
     <script src="javascript/loan_request.js"></script>
 
 </body>
-<!-- {{form}} -->
 </html>

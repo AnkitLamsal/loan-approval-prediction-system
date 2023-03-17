@@ -52,6 +52,36 @@ class LoanRequestModelForm(forms.ModelForm):
         # fields = "__all__"
         exclude = ['applicant_details',]
         
+        def clean_emp_length(self):
+            data = self.cleaned_data.get("emp_length")
+            if data<0 and data>43:
+                print("Invalid")
+                raise ValidationError("Employment length must be within 0 to 43 years.")
+            else:
+                return data
+        def clean_person_age(self):
+            data = self.cleaned_data.get("person_age")
+            if data<18 and data>110:
+                print("Invalid")
+                raise ValidationError("Age must be within 0 to 110 years.")
+            else:
+                return data        
+        
+        def clean_loan_amount(self):
+            data = self.cleaned_data.get('loan_amount')
+            if data<0.0 and data>40000.0:
+                raise ValidationError("Loan amount must be within 0.0 to 40000.0")
+            else:
+                return data
+            
+        def clean_income(self):
+            data = self.cleaned_data["income"]
+            if data<1000.0 and data>7000000.0:
+                raise ValidationError("Income must be within 1000.0 to 7000000.0")
+            else:
+                return data
+           
+        
 class LoanDetailsModelForm(forms.ModelForm):
     class Meta:
         model = LoanDetails

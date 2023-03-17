@@ -5,8 +5,28 @@
 {{income}}<br>
 {{loan_intent}}<br>
 
+
 <form method="post">
     {% csrf_token %}
-    {{form}}
-    <input type="submit" value='submit'>
+    Credit History:
+    {{form.credit_history}}
+    {{form.credit_history.errors}}
+    <br>
+    Credit Default:
+    {{form.credit_default}}
+    {{form.credit_default.errors}}
+    <br>
+    Interest rate:
+    {{form.interest_rate}}
+    {{form.interest_rate.errors}}
+    <br>
+    Grade:
+    {{form.grade}}
+    {{form.grade.errors}}
+    <br>
+    Loan Percent to income:
+    {{form.loan_percent_to_income}}
+    {{form.loan_percent_to_income.errors}}
+    <br>
+    <input type="submit" value='Provide Loan Data'>
 </form>

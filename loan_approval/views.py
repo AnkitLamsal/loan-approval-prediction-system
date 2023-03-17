@@ -72,10 +72,6 @@ class UserLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('loan_approval:dashboard') 
     
-    def form_invalid(self, form):
-        messages.error(self.request,'Invalid username or password')
-        return self.render_to_response(self.get_context_data(form=form))
-    
 
 @login_required
 def logout_view(request):
@@ -83,25 +79,32 @@ def logout_view(request):
     return redirect('loan_approval:index')
 
 
-@method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
+# @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
+# class LoanRequestCreateView(CreateView):
+#     model = Loan
+#     form_class = LoanRequestModelForm
+#     success_url = reverse_lazy('loan_approval:dashboard')
+#     template_name = 'loan_approval/applicant_loan_request_form.html'
+    
+#     def post(self, request, *args, **kwargs):
+#         form = self.get_form()
+#         print(type(form))
+#         if(self.request.user.is_staff == False):
+#             # print(form)
+#             # print(self.request.user.applicant)
+#             form.instance.applicant_details = self.request.user.applicant
+#             print(type(form))
+#             if form.is_valid():
+#                 return self.form_valid(form)
+#             else:
+#                 return self.form_invalid(form)
+
 class LoanRequestCreateView(CreateView):
     model = Loan
     form_class = LoanRequestModelForm
     success_url = reverse_lazy('loan_approval:dashboard')
     template_name = 'loan_approval/applicant_loan_request_form.html'
     
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if(self.request.user.is_staff == False):
-            # print(form)
-            # print(self.request.user.applicant)
-            form.instance.applicant_details = self.request.user.applicant
-            if form.is_valid():
-                return self.form_valid(form)
-            else:
-                return self.form_invalid(form)
-        else:
-            return HttpResponse("Admin Cannot Request Loan.")
         
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanRequestListView(ListView):
@@ -153,6 +156,13 @@ def loanDetailsCreateView(request,pk):
         id = pk
         # print(id)
         form = LoanDetailsModelForm(request.POST)
+        context['home_ownership'] = queryset.home_ownership
+        context['emp_length'] = queryset.emp_length
+        context['loan_amount'] = queryset.loan_amount
+        context['person_age'] = queryset.person_age
+        context['income'] = queryset.income
+        context['loan_intent'] = queryset.loan_intent
+        context['id'] = pk
         context['form'] = form
         if form.is_valid():
             loan_details = form.save(commit=False)
@@ -161,6 +171,8 @@ def loanDetailsCreateView(request,pk):
             loan_details.save()
             prediction = LoanPrediction.objects.create(loan_data=queryset)
             prediction.save()
+        else:
+            return render(request, 'loan_approval/loan_details_form.html',context)
         return redirect('loan_approval:index')
     
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
@@ -242,28 +254,23 @@ def update_loan_details(request,pk):
         form = LoanDetailsModelForm(request.POST or None, instance = obj)
         context['form'] = form
         if form.is_valid():
+            print("Form is valid.")
             # print(form)
             form.save()
+            return redirect("loan_approval:applicant_loan_list")
         else:
             return render(request, 'loan_approval/loan_details_form.html',context)
-        return redirect("loan_approval:applicant_loan_list")
 
 def predict(request,pk):
     # Function used by machine learning.
     obj = get_object_or_404(Loan, id = pk)
     model = create_model(obj)
-    model.predict_data()
+    loan_status = model.predict_data()
     # Pipelining and others.
     prediction_status = True
-    loan_status = False
-    try:
-        r1 = LoanPrediction.objects.create(loan_data = obj, prediction_status= prediction_status, loan_status=loan_status)
-        print("Object Created.")
-    except:
-        print("Hello")
-        r1 = obj.loanprediction
+    prediction_object = obj.loanprediction
     context = {}
-    context['prediction']  = r1.loan_status
+    context['prediction']  = True
     # print(context)
     return JsonResponse(context, status=200)
 

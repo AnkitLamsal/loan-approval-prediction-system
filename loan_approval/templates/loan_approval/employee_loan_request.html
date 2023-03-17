@@ -1,9 +1,12 @@
+{% if user.is_staff %}
 <ul>
     <!-- Iterate over object_list -->
     <li>Object name &nbsp; Home Ownership &nbsp; Employee Length &nbsp; Loan Amount &nbsp; Applicant &nbsp; Manager &nbsp;</li>
     {% for object in object_list %}
     <!-- Display Objects -->
+    {% if not object.loandetails %}
     <li>
+        {{object.loandetails}}
         {{ object }} &nbsp; {{object.home_ownership}} &nbsp; {{object.emp_length}} &nbsp; {{object.loan_amount}}
         &nbsp; {{object.applicant_details}} &nbsp; {{object.managed_by}}<br>
         <a href="{% url 'loan_approval:loan_details_create' pk=object.id%}">Provide Loan Data</a>
@@ -14,6 +17,7 @@
         {% endif %}
             
     </li>
+    {% endif %}
     
     {% comment %} <li>{{ object.description }}</li> {% endcomment %}
    
@@ -23,3 +27,4 @@
     <li>No objects yet.</li>
     {% endfor %}
 </ul>
+{% endif %}
