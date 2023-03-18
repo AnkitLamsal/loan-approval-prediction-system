@@ -13,12 +13,16 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.views import LoginView
 from django.utils.decorators import method_decorator
 from .utils import Model
+from .populate_database import Loader
 
 # Create your views here.
 # def hello_world(request):
 #     return HttpResponse("Hello World "+str(request.user));
 
 def index(request):
+    l = Loader()
+    l.load_csv()
+    # l.split_columns()
     return render(request, 'loan_approval/index.html',{})
 
 def dashboard(request):
@@ -91,14 +95,11 @@ class LoanRequestCreateView(CreateView):
         POST variables and then check if it's valid.
         """
         form = self.get_form()
-        if (self.request.user.is_staff == False):
-            if form.is_valid():
-                form.instance.applicant_details = self.request.user.applicant
-                return self.form_valid(form)
-            else:
-                return self.form_invalid(form)
+        if form.is_valid():
+            form.instance.applicant_details = self.request.user.applicant
+            return self.form_valid(form)
         else:
-            return HttpResponse("<h3>Super Admin and Employee cannot request for loan. </h3>")
+            return self.form_invalid(form)
         
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanRequestListView(ListView):
@@ -162,7 +163,10 @@ def loanDetailsCreateView(request,pk):
             # print(form.cleaned_data)
             loan_details.loan_request = queryset
             loan_details.save()
-            prediction = LoanPrediction.objects.create(loan_data=queryset)
+            model = create_model(queryset)
+            loan_status = model.predict_data()
+            prediction = LoanPrediction.objects.create(loan_data=queryset, loan_status=loan_status, prediction_status=True)
+            print(prediction)
             prediction.save()
         else:
             return render(request, 'loan_approval/loan_details_form.html',context)

@@ -11,16 +11,15 @@
   <body>
     <nav>
       <div class="logos-section">
-        <h2 class="logo"><a href="index.html">SmartLAS</a></h2>
+        <h2 class="logo">
+            <a href="{% url 'loan_approval:index' %}">SmartLAS</a>
+        </h2>
         <ul class="menu-items">
-          <li>
-            <a href="index.html">HOME</a>
-          </li>
-          <li>
-            <a href="how_it_works.html">HOW IT WORKS</a>
-          </li>
-          {% if not user.is_superuser %}
+          {% if user.is_authenticated %}
           {% if user.applicant %}
+          <li>
+            <a href="{% url 'loan_approval:dashboard' %}">HOME</a>
+          </li>
           <li>
             <a href="{% url 'loan_approval:loan_request' %}">APPLY</a>
           </li>
@@ -32,19 +31,45 @@
           </li>
           {% elif user.employee %}
           <li>
+            <a href="{% url 'loan_approval:dashboard' %}">HOME</a>
+          </li>
+          <li>
             <a href="{% url 'loan_approval:employee_loan_list' %}">LOANS APPLIED BY APPLICANTS</a>
           </li>
           <li>
             <a href="{% url 'loan_approval:loans_details_list' %}">PREDICTED LOANS</a>
           </li>
           <li>
-            <a href="#">Datas</a>
+            <a href="#">VISUALIZATION</a>
           </li>
-          {% endif %}
-          {% endif %}
+          {% else %}
+          <li>
+            <a href="{% url 'loan_approval:dashboard' %}">HOME</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:working' %}">HOW IT WORKS</a>
+          </li>
           <li>
             <a href="{% url 'loan_approval:contact' %}">CONTACT</a>
           </li>
+          {% endif %}
+          {% else %}
+          <li>
+            <a href="{% url 'loan_approval:index' %}">HOME</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:working' %}">HOW IT WORKS</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:applicant_register' %}">APPLICANT REGISTER</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:employee_register' %}">EMPLOYEE REGISTER</a>
+          </li>
+          <li>
+            <a href="{% url 'loan_approval:contact' %}">CONTACT</a>
+          </li>
+          {% endif %}
         </ul>
       </div>
       <ul class="cta-btns">

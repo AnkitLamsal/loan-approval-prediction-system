@@ -17,7 +17,7 @@
         <div class="field">
           <!-- <input type="text" required /> -->
           {{form.username}}
-          <label>Full Name</label>
+          <label>Username</label>
         </div>
         {% if  form.username.errors %}
         <br>
@@ -65,8 +65,9 @@
         <div class="field">
           <input type="submit" value="Register" />
         </div>
-        <div class="signup-link">Already a member? <a href="#">Signup</a></div>
-      </form>
+        <div class="signup-link">Already a member? <a href="{% url 'loan_approval:user_login' %}">LOGIN</a></div>
+        <div class="signup-link"><a href="{% url 'loan_approval:index' %}">Back to HOME PAGE</a></div>
+        </form>
     </div>
 
     <script src="{% static 'javascript/signup.js' %}"></script>
