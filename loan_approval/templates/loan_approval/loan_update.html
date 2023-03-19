@@ -16,7 +16,7 @@
             {% csrf_token %}
             <h2>UPDATE LOANS</h2>
                 <div class="form-group">
-                <label for="age">Age *</label>
+                <label for="age">Age (In Years)*</label>
                 {{form.person_age}}
             </div>
             {{form.person_age.errors}}
@@ -31,17 +31,17 @@
             </div>
             {{form.home_ownership.errors}}
             <div class="form-group">
-                <label for="income">Income *</label>
+                <label for="income">Income (In $)*</label>
                 {{form.income}}
             </div>
             {{form.income.errors}}
             <div class="form-group">
-                <label for="employment-length">Employment Length</label>
+                <label for="employment-length">Employment Length (In Years)</label>
                 {{form.emp_length}}
             </div>
             {{form.emp_length.errors}}
             <div class="form-group">
-                <label for="loan-amount">Loan Amount *</label>
+                <label for="loan-amount">Loan Amount (In $) *</label>
                 {{form.loan_amount}}
             </div>
             {{form.loan_amount.errors}}

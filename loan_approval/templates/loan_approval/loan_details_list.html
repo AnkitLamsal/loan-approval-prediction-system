@@ -1,36 +1,50 @@
-{% if user.is_authenticated %}
-{% if not request.user.is_superuser %}
-<style>
-    table,td, tr{
-        border:2px black solid;
-    }
-</style>    
-<h3>Check Approved Loans {{request.user}}</h3>
-<table>
-<tr>
-    {% if request.user.applicant %}
-    <td>Requested Applicants Name</td>
-    <td> Loan Manager </td>
-    <td>Applicant Employment Length</td>
-    <td>Intention of Loan</td>
-    <td>Amount Applied</td>
-    <td> Prediction Approval </td>
-    <td>Loan Details</td>
-    {% endif %}
-    {% if request.user.employee %}
-    <td>Requested Applicants Name</td>
-    <td>Applicant Employment Length</td>
-    <td>Intention of Loan</td>
-    <td>Amount Applied</td>
-    <td>Credit History</td>
-    <td>Credit Default</td>
-    <td>Loan Interest Rate</td>
-    <td> Prediction Approval </td>
-    <td>Loan Details</td>
-    {% endif %}
-</tr>
-{% for object in object_list %}
-<tr>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartLAS - loan details list</title>
+    <link rel="stylesheet" href=" {% static 'css/loan_details_list.css' %} " />
+  </head>
+  <body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    {% if user.is_authenticated %}
+    {% if not request.user.is_superuser %}
+    <table id="loan-prediction">
+      <h2>Employee View Loan Prediction Details</h2>
+      <thead>
+        <tr>
+            {% if request.user.applicant %}
+            <td>Requested Applicants Name</td>
+            <td> Loan Manager </td>
+            <td>Applicant Employment Length</td>
+            <td>Intention of Loan</td>
+            <td>Amount Applied</td>
+            <td> Prediction Approval </td>
+            <td>Loan Details</td>
+            {% endif %}
+            {% if request.user.employee %}
+            <td>Requested Applicants Name</td>
+            <td>Applicant Employment Length</td>
+            <td>Intention of Loan</td>
+            <td>Amount Applied</td>
+            <td>Credit History</td>
+            <td>Credit Default</td>
+            <td>Loan Interest Rate</td>
+            <td> Prediction Approval </td>
+            <td>Loan Details</td>
+            {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in object_list %}
+    <tr>
     {% if request.user.applicant %}
     <td>{{ object.loan_request.applicant_details }}</td>
     <td> {{ object.loan_request.managed_by }} </td>
@@ -53,19 +67,24 @@
     <td>{{ object.credit_history }}</td>
     <td>{{ object.credit_default }}</td>
     <td>{{ object.interest_rate }}</td>
-    <td> <input type="button" class="predict-button-{{object.loan_request.id}}" value="Predict"
+    <td> <input type="button" class="predict-button-{{object.loan_request.id}} button" value="Predict"
         onclick="submit({id: {{object.loan_request.id}}})" />
 <h3 class="hello-{{object.loan_request.id}}"></h3></td>
-    <td><a href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
+    <td><a class="loan-details" href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
     {% endif %}
 </tr>
 {% endfor %}
+</tbody>
+</table>
 {% else %}
 403 Error: Not authorized
 {% endif %}
 {% else %}
 404 Error 
 {% endif %}
+    <script src="{% static 'js/script.js' %} "></script>
+  </body>
+</html>
 
 <script>
     function submit({
@@ -95,3 +114,6 @@
         //document.querySelector('.beruju_hide').style.display = "block";
     }
 </script>
+
+
+

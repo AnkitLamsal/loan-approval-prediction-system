@@ -10,32 +10,37 @@
     <link rel="stylesheet" href="{% static 'css/loan_details.css' %}">
 </head>
 <body>
+  <div class="mortgage-container">
   {% if not user.is_superuser %}
   {% if user.is_staff %}
-  <h1>Loan Details</h1>
-  <h3>Credit history: {{object.credit_history}}</h3>
-  <h3>Grade: {{object.grade}}</h3>
-  <h3>Interest: {{object.interest_rate}}</h3>
-  <h3>Credit Default: {{object.credit_default}}</h3>
-  <h3>Loan Percent to income: {{object.loan_percent_to_income}}</h3>
-  <h3>Home Ownership: {{object.loan_request.home_ownership}}</h3>
-  <h3>Employment Length:{{object.loan_request.emp_length}}</h3>
-  <h3>Loan Amount:{{object.loan_request.loan_amount}}</h3>
-  <h3>Age :{{object.loan_request.person_age}}</h3>
-  <h3>Income:{{object.loan_request.income}}</h3>
-  <h3>Loan Intent:{{object.loan_request.loan_intent}}</h3>
-  <h3>Applicant Name:{{object.loan_request.applicant_details}}</h3>
+    <h2>LOAN DETAILS</h2>
+    <div class="mortgage-details">
+  <p><b>Credit history (In Years):</b> {{object.credit_history}}</p>
+  <p><b>Grade:</b> {{object.grade}}</p>
+  <p><b>Interest:</b> {{object.interest_rate}}</p>
+  <p><b>Credit Default:</b> {{object.credit_default}}</p>
+  <p><b>Loan Percent to income(In %):</b> {{object.loan_percent_to_income}}</p>
+  <p><b>Home Ownership:</b> {{object.loan_request.home_ownership}}</p>
+  <p><b>Employment Length (In Years):</b> {{object.loan_request.emp_length}}</p>
+  <p><b>Loan Amount(In $):</b> {{object.loan_request.loan_amount}}</p>
+  <p><b>Age (In Years):</b>{{object.loan_request.person_age}}</p>
+  <p><b>Income (In $):</b>{{object.loan_request.income}}</p>
+  <p><b>Loan Intent:</b>{{object.loan_request.loan_intent}}</p>
+  <p><b>Applicant Name:</b> {{object.loan_request.applicant_details}}</p>
+    </div>
   {% else %}
-  <h3>Home Ownership: {{object.loan_request.home_ownership}}</h3>
-  <h3>Employment Length:{{object.loan_request.emp_length}}</h3>
-  <h3>Loan Amount:{{object.loan_request.loan_amount}}</h3>
-  <h3>Age :{{object.loan_request.person_age}}</h3>
-  <h3>Income:{{object.loan_request.income}}</h3>
-  <h3>Loan Intent:{{object.loan_request.loan_intent}}</h3>
-  <h3>Loan Manager:{{object.loan_request.managed_by}}</h3>
+  <div class="mortgage-details">
+  <p><b>Home Ownership:</b> {{object.loan_request.home_ownership}}</p>
+  <p><b>Employment Length (In Years):</b>{{object.loan_request.emp_length}}</p>
+  <p><b>Loan Amount (In $):</b>{{object.loan_request.loan_amount}}</p>
+  <p><b>Age (In Years):</b>{{object.loan_request.person_age}}</p>
+  <p><b>Income (In $):</b>{{object.loan_request.income}}</p>
+  <p><b>Loan Intent:</b>{{object.loan_request.loan_intent}}</p>
+  <p><b>Loan Manager:</b> {{object.loan_request.managed_by}}</p>
+  </div>
   {% endif %}
   {% else %}
-  <h3> Super user not authorized. </h3>
+  <p> Super user not authorized. </p>
   {% endif %}
 </body>
 </html>

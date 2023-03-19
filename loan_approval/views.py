@@ -327,3 +327,78 @@ def create_model(loan):
         credit_history_length = credit_history
     )
     return model
+
+def return_loan_credit_history(request):
+    employee = request.user.employee
+    credit_history = {}
+    loans = Loan.objects.filter(managed_by=employee)
+    for i  in range(len(loans)):
+        loandetails = loans[i].loandetails
+        hist = loandetails.credit_history 
+        # print()
+        if hist in credit_history.keys():
+            credit_history[hist]+=1
+        else:
+            credit_history[hist] = 1
+    print(credit_history)
+    context = {}
+    context['credit_history'] = credit_history
+    return JsonResponse(context, status=200)
+
+def return_loan_predictions(request):
+    if request.user.is_superuser== False and request.user.is_staff == True:
+        employee = request.user.employee
+        loan_prediction = {}
+        loans = Loan.objects.filter(managed_by=employee)
+        for i  in range(len(loans)):
+            loanprediction = loans[i].loanprediction
+            prediction = loanprediction.loan_status 
+            # print()
+            if prediction in loan_prediction.keys():
+                loan_prediction[prediction]+=1
+            else:
+                loan_prediction[prediction] = 1
+        # print(credit_history)
+        context = {}
+        context['loan_prediction'] = loan_prediction
+        return JsonResponse(context, status=200)
+    else:
+        context['error'] = {"403":"User not authorized."}
+        return JsonResponse(context, status = 403)
+
+def return_home_ownership(request):
+    context = {}
+    if request.user.is_superuser== False and request.user.is_staff == True:
+        employee = request.user.employee
+        homeownership = {}
+        loans = Loan.objects.filter(managed_by=employee)
+        for i in range(len(loans)):
+            ownership = loans[i].home_ownership
+            if ownership in homeownership.keys():
+                homeownership[ownership]+=1
+            else:
+                homeownership[ownership]=1
+        context['home_ownership'] = homeownership
+        return JsonResponse(context, status = 200)
+    else:
+        context['error'] = {"403":"User not authorized."}
+        return JsonResponse(context, status=403)
+
+def return_intent(request):
+    context = {}
+    if request.user.is_superuser== False and request.user.is_staff == True:
+        employee = request.user.employee
+        loan_intent = {}
+        loans = Loan.objects.filter(managed_by=employee)
+        for i in range(len(loans)):
+            intent = loans[i].intent
+            if intent in loan_intent.keys():
+                loan_intent[intent]+=1
+            else:
+                loan_intent[intent]=1
+        context['loan_intent'] = loan_intent
+        return JsonResponse(context, status = 200)
+    else:
+        context['error'] = {"403":"User not authorized."}
+        return JsonResponse(context, status=403)
+        

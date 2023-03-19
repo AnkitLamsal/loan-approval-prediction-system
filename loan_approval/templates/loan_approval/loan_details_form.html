@@ -6,46 +6,58 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartLAS - Loan details</title>
-    <link rel="stylesheet" href="{% static 'css/loan_details.css' %}">
+    <title>Loan data</title>
+    <link rel="stylesheet" href="{% static 'css/provide_loan_data.css' %} ">
 </head>
 <body>
   {% if not user.is_superuser %}
   {% if user.is_staff %}
-
-{{home_ownership}}<br>
-{{emp_length}}<br>
-{{loan_amount}}<br>
-{{person_age}}<br>
-{{income}}<br>
-{{loan_intent}}<br>
-
-
-<form method="post">
-    {% csrf_token %}
-    Credit History:
-    {{form.credit_history}}
-    {{form.credit_history.errors}}
-    <br>
-    Credit Default:
-    {{form.credit_default}}
-    {{form.credit_default.errors}}
-    <br>
-    Interest rate:
-    {{form.interest_rate}}
-    {{form.interest_rate.errors}}
-    <br>
-    Grade:
-    {{form.grade}}
-    {{form.grade.errors}}
-    <br>
-    Loan Percent to income:
-    {{form.loan_percent_to_income}}
-    {{form.loan_percent_to_income.errors}}
-    <br>
-    <input type="submit" value='Provide Loan Data'>
-</form>
-{% else %}
+    <div class="mortgage-container">
+        <div class="mortgage-details">
+          <h2>LOAN DETAILS</h2>
+          <p><b>Applicant Home Ownership:</b> {{home_ownership}}</p>
+          <p><b>Applicant Employment Length: (In years)</b> {{emp_length}}</p>
+          <p><b>Loan Amount(In $):</b> {{loan_amount}}</p>
+          <p><b>Applicant Age (In years):</b> {{person_age}}</p>
+          <p><b>Applicant's Income (In $):</b> {{income}}</p>
+          <p><b>Loan Purpose:</b> {{loan_intent}}</p>
+        </div>
+        <div class="credit-form">
+          <h2>CREDIT INFORMATION</h2>
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="credit-history">Credit History (In years):</label><br>
+              {{form.credit_history}}
+              {{form.credit_history.errors}}
+            </div>
+            <div class="form-group">
+              <label for="credit-default">Credit Default:</label><br>
+              {{form.credit_default}} <br>
+              {{form.credit_default.errors}}
+            </div>
+            <div class="form-group">
+              <label for="interest-rate">Interest Rate (In %):</label><br>
+              {{form.interest_rate}}
+              {{form.interest_rate.errors}}          
+            </div>
+            <div class="form-group">
+              <label for="grade">Grade:</label><br>
+              {{form.grade}}
+              {{form.grade.errors}}
+            </div>
+            <div class="form-group">
+              <label for="loan-income-percent">Loan Percent to Income:</label><br>
+              {{form.loan_percent_to_income}}
+              {{form.loan_percent_to_income.errors}}
+            </div>
+            <div class="form-group">
+              <button type="submit">SUBMIT</button>
+            </div>
+          </form>
+        </div>
+      </div>  
+      {% else %}
 <h3> 403 Error: Applicant and superadmin are not allowed to provide loan information.</h3>
 {% endif %}
 {% else %}
