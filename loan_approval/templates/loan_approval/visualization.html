@@ -1,0 +1,48 @@
+{% if user.is_authenticated %}
+{% if not user.is_superuser %}
+{% if user.is_staff %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'js/visualize.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href=" {% static 'css/visualize.css' %} "/>
+    <title> Visualization</title>
+</head>
+<body>
+    <div class="parent">
+        <div class="visual-form">
+            <div class="h3"> Visualize Loans Based on properties</div>
+            <div class="visual-selector">
+                <select name="type" id="type" class="type">
+                    <option value="0">-----</option>
+                    <option value="1">Credit History</option>
+                    <option value="2">Loan Predictions</option>
+                    <option value="3">Home Ownership</option>
+                    <option value="4">Loan Intent</option>
+                </select>
+            </div>
+            <div class="error"></div>
+            <input type="submit" value="Visualize Loan" onclick="submit_form()" class="button">
+        </div>
+<!-- </form> -->
+        <div class="canvas">
+            <div class="chart-info"></div>
+            <canvas id="myChart" width="100" height="100"></canvas>
+        </div>
+    </div>
+</body>
+</html>
+{% else %}
+403 Error :User not authorized.
+{% endif %}
+{% else %}
+403 Error :User not authorized.
+{% endif %}
+{% else %}
+404 Error: Cannot view this Page.
+{% endif %}

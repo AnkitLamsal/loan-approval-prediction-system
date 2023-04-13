@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SmartLAS</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/loan_request_.css'%}">
+    <link rel="stylesheet" href="{% static 'css/dummy.css'%}">
   </head>
 
   <body>
@@ -92,49 +92,51 @@
     </nav>
 
     <main>
-
-    {% if not user.is_staff %}
-    <table id="loan-prediction">
-        <h2>Applicant Loan List</h2>
-        <thead>
-          <tr>
-            <th class="bor-le">SN</th>
-            <th>Applicant Name</th>
-            <th>Home Ownership</th>
-            <th>Employee Length (In Years)</th>
-            <th>Loan Amount (In $)</th>
-            <th>Manager</th>
-            <th class="bor-ri"> Action </th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for object in object_list %}
-            <!-- Display Objects -->
-                {% if not object.loandetails %}
-                <tr>
-                    <td>1</td>
-                    <td>{{object.applicant_details}}</td>
-                    <td>{{object.home_ownership}}</td>
-                    <td>{{object.emp_length}}</td>
-                    <td>{{object.loan_amount}}</td>
-                    <td>{{object.managed_by}}</td>
-                    <td>
-                        <a class="button" href="{% url 'loan_approval:loan_update' object.id %}">Update</a>
-                        <a class="button" href="{% url 'loan_approval:loan_delete' object.id %}">Delete</a>    
-                    </td>
-                  </tr>
-                {% endif%}
-            {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-    <h3>Employee or super admin cannot request loans.</h3>
-    {% endif%}  
-<script src="javascript/loan_request.js"></script>
-</body>
-</html>
-{% else %}
-{% endif %}
+      <div class="main_class">
+        <form method="post">
+          {% csrf_token %}
+          <h2>MAKE A REQUEST FOR LOAN</h2>
+          <div class="form-group">
+              <label for="age">Age (In years) *</label>
+              {{form.person_age}}
+          </div>
+          {{form.person_age.errors}}
+          <div class="form-group">
+              <label for="intent">Intent *</label>
+              {{form.loan_intent}}
+          </div>
+          {{form.loan_intent.errors}}
+          <div class="form-group">
+              <label for="ownership">Ownership *</label>
+              {{form.home_ownership}}
+          </div>
+          {{form.home_ownership.errors}}
+          <div class="form-group">
+              <label for="income">Income (in $)*</label>
+              {{form.income}}
+          </div>
+          {{form.income.errors}}
+          <div class="form-group">
+              <label for="employment-length">Employment Length (in years)</label>
+              {{form.emp_length}}
+          </div>
+          {{form.emp_length.errors}}
+          <div class="form-group">
+              <label for="loan-amount">Loan Amount (in $)*</label>
+              {{form.loan_amount}}
+          </div>
+          {{form.loan_amount.errors}}
+          <div class="form-group">
+              <label for="additional-info">Loan Manager</label>
+              <!-- <textarea id="additional-info" name="additional-info"></textarea> -->
+              {{form.managed_by}}
+          </div>
+          {{form.managed_by.errors}}
+          <input type="submit" value="Submit">
+      </form>
+  
+      <script src="javascript/loan_request.js"></script>
+      </div>
 
     </main>
 
@@ -145,3 +147,4 @@
         </footer> -->
   </body>
 </html>
+{% endif %}

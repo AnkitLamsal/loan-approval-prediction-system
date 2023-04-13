@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import index,dashboard,about,working, contact, applicant_register, employee_register, logout, loanDetailsCreateView, update_loan_request, delete_loan, update_loan_details, predict, return_loan_credit_history, return_loan_predictions
+from .views import (index,dashboard,about,working, contact, applicant_register, 
+                    employee_register, logout, loanDetailsCreateView, update_loan_request, 
+                    delete_loan, update_loan_details, predict, return_loan_credit_history,
+                    return_home_ownership,return_intent,dummy, 
+                    return_loan_predictions,visualization)
 from .views import LoanRequestCreateView, UserLoginView, LoanRequestListView, LoanListView, LoanDetailsListView, LoanDetailsDetailView
 from django.contrib.auth.views import LogoutView
 
@@ -30,6 +34,10 @@ urlpatterns = [
     path("loan-details/",LoanDetailsListView.as_view(),name="loans_details_list"),
     path("loan/predict/<int:pk>/",predict, name='predict'),
     # Visualization related works
+    path('visualization/', visualization, name='visualize'),
     path("visualization/credit-history/",return_loan_credit_history, name="visualize-cr-hist"),
-    path("visualization/loan-prediction/",return_loan_predictions, name="visualize-loan-pred")
+    path("visualization/loan-prediction/",return_loan_predictions, name="visualize-loan-pred"),
+    path("visualization/home-ownership/",return_home_ownership, name="visualize-home-ownership"),
+    path("visualization/loan-intent/",return_intent,name="visualize-loan-intent"),
+    path("dummy/",dummy,name='dummy'),
 ]

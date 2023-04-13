@@ -37,6 +37,9 @@ def contact(request):
 def working(request):
     return render(request, 'loan_approval/howitworks.html',{})
 
+def visualization(request):
+    return render(request,'loan_approval/visualization.html',{})
+
 # def apply_now(request):
 #     return render(request, 'loan_approval/about.html',{})
 # User Registration
@@ -89,17 +92,11 @@ class LoanRequestCreateView(CreateView):
     success_url = reverse_lazy('loan_approval:applicant_loan_list')
     template_name = 'loan_approval/applicant_loan_request_form.html'
     
-    def post(self, request, *args, **kwargs):
-        """
-        Handle POST requests: instantiate a form instance with the passed
-        POST variables and then check if it's valid.
-        """
-        form = self.get_form()
-        if form.is_valid():
-            form.instance.applicant_details = self.request.user.applicant
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+    def form_valid(self, form):
+        obj = form.save(commit = False)
+        obj.applicant_details = self.request.user.applicant
+        return super().form_valid(form)
+        
         
 @method_decorator(login_required(login_url=reverse_lazy('loan_approval:user_login')),name="dispatch")
 class LoanRequestListView(ListView):
@@ -269,7 +266,7 @@ def predict(request,pk):
     # print(not request.user.is_superuser)
     condition1 = request.user.is_superuser
     condition2 = request.user.is_authenticated
-    # print(condition1 and condition2 )
+    # print(condition1 and condition2 ) 
     if  condition2:
     # Function used by machine learning.
         if condition1:
@@ -333,13 +330,18 @@ def return_loan_credit_history(request):
     credit_history = {}
     loans = Loan.objects.filter(managed_by=employee)
     for i  in range(len(loans)):
-        loandetails = loans[i].loandetails
-        hist = loandetails.credit_history 
-        # print()
-        if hist in credit_history.keys():
-            credit_history[hist]+=1
+        try:
+            loandetails = loans[i].loandetails
+        except:
+            print("Exception found.")
+            pass
         else:
-            credit_history[hist] = 1
+            hist = loandetails.credit_history 
+            # print()
+            if hist in credit_history.keys():
+                credit_history[hist]+=1
+            else:
+                credit_history[hist] = 1
     print(credit_history)
     context = {}
     context['credit_history'] = credit_history
@@ -351,13 +353,17 @@ def return_loan_predictions(request):
         loan_prediction = {}
         loans = Loan.objects.filter(managed_by=employee)
         for i  in range(len(loans)):
-            loanprediction = loans[i].loanprediction
-            prediction = loanprediction.loan_status 
-            # print()
-            if prediction in loan_prediction.keys():
-                loan_prediction[prediction]+=1
+            try:
+                loanprediction = loans[i].loanprediction
+            except:
+                pass
             else:
-                loan_prediction[prediction] = 1
+                prediction = loanprediction.loan_status 
+                # print()
+                if prediction in loan_prediction.keys():
+                    loan_prediction[prediction]+=1
+                else:
+                    loan_prediction[prediction] = 1
         # print(credit_history)
         context = {}
         context['loan_prediction'] = loan_prediction
@@ -391,14 +397,16 @@ def return_intent(request):
         loan_intent = {}
         loans = Loan.objects.filter(managed_by=employee)
         for i in range(len(loans)):
-            intent = loans[i].intent
+            intent = loans[i].loan_intent
             if intent in loan_intent.keys():
                 loan_intent[intent]+=1
             else:
                 loan_intent[intent]=1
         context['loan_intent'] = loan_intent
         return JsonResponse(context, status = 200)
-    else:
+    else :
         context['error'] = {"403":"User not authorized."}
         return JsonResponse(context, status=403)
-        
+
+def dummy(request):
+    return render(request,"loan_approval/dummy.html", {})

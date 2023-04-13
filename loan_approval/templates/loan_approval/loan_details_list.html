@@ -17,7 +17,7 @@
     {% if user.is_authenticated %}
     {% if not request.user.is_superuser %}
     <table id="loan-prediction">
-      <h2>Employee View Loan Prediction Details</h2>
+      <h2>Loan Approval List</h2>
       <thead>
         <tr>
             {% if request.user.applicant %}
@@ -53,11 +53,11 @@
     <td>{{ object.loan_request.loan_amount }}</td>
     {% comment %} <td><a href="{% url 'loan_approval:predict' pk=object.loan_request.id%}">Details</a></td> {% endcomment %}
     <td>
-        <input type="button" class="predict-button-{{object.loan_request.id}}" value="Predict"
-                        onclick="submit({id: {{object.loan_request.id}}})" />
-        <h3 class="hello-{{object.loan_request.id}}"></h3>
+        <input type="button" class="predict-button-{{object.loan_request.id}} button" value="Predict"
+        onclick="submit({id: {{object.loan_request.id}}})" />
+<h3 class="hello-{{object.loan_request.id}}"></h3>
     </td>
-    <td><a href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
+    <td><a class="loan-details" href="{% url 'loan_approval:loan_details_detail' pk=object.id%}">Details</a></td>
     {% endif %}
     {% if request.user.employee %}
     <td>{{ object.loan_request.applicant_details }}</td>
