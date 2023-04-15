@@ -83,56 +83,6 @@
     border: 2px solid #ff5e78;
   }
   
-  /* Main */
-
-  
-  /* Images */
-  .desktop-img {
-    display: block;
-  }
-  
-  main h1 {
-    font-size: 3rem;
-    color: #ff5e78;
-  }
-  
-  main p {
-    font-size: 0.7rem;
-    width: 18rem;
-    color: #c850c0;
-    line-height: 1rem;
-  }
-  
-  m {
-    background: linear-gradient(to right, #ff5e78, #c850c0);
-    color: #ebdde8;
-    border: none;
-    font-size: 0.8rem;
-    padding: 0.6rem 1rem;
-    border-radius: 1.4rem;
-    margin-top: 1rem;
-  }
-  
-  main button:hover {
-    color: rgb(114, 5, 94);
-  }
-  
-  #text-side {
-    margin-top: 2rem;
-    color: #c850c0;
-  }
-  
-  /* Hero Image */
-  #img-side img {
-    width: 45rem;
-  }
-  
-  /* footer */
-  .attribution {
-    font-size: 0.7rem;
-    text-align: center;
-    margin-top: 5.5rem;
-  }
   
   
   /* Responsive */

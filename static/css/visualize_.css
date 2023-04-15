@@ -1,8 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
@@ -23,7 +20,7 @@
 }
 .h3,.chart-info{
     color: #c850c0;
-    font-size:2rem;
+    font-size:1.5rem;
     text-align: center;
 }
 .type{
@@ -59,10 +56,3 @@
   .button:hover {
     color: rgb(114, 5, 94);
   }
-/* canvas{
-
-    width:600px !important;
-    height:600px !important;
-  
-  } */
-  

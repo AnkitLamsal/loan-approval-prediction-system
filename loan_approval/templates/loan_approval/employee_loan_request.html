@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartLAS - Loan details</title>
-    <link rel="stylesheet" href="{% static 'css/loan_details_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loan_details_list_.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
@@ -94,7 +94,7 @@
 <h3>403: Applicant and super admin not authorized.</h3>
 {% elif  user.is_staff %}
 <table id="loan-prediction">
-    <h2>Applicant Loan List</h2>
+    <h2>APPLICANT LOAN LIST</h2>
     <thead>
       <tr>
         <th>SN</th>
@@ -118,7 +118,7 @@
                 <td>{{object.loan_amount}}</td>
                 <td>{{object.managed_by}}</td>
                 <td>
-                    <a href="{% url 'loan_approval:loan_details_create' pk=object.id%}">Provide Loan Data</a>
+                    <a class="button" href="{% url 'loan_approval:loan_details_create' pk=object.id%}">Provide Loan Data</a>
                 </td>
               </tr>
             {% endif%}
